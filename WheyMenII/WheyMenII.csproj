@@ -12,6 +12,12 @@
     <ProjectReference Include="..\WheyMenIIDAL.Library\WheyMenDAL.Library.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 
 
 </Project>
