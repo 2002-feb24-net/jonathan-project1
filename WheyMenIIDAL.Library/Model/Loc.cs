@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WheyMenDAL.Library.Model
 {
@@ -12,6 +13,7 @@ namespace WheyMenDAL.Library.Model
         }
 
         public int Id { get; set; }
+        [Display(Name="Location Name")]
         public string Name { get; set; }
 
         public virtual ICollection<Inventory> Inventory { get; set; }
