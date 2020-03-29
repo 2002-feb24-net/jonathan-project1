@@ -4,20 +4,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WheyMenDAL.Library.Model
 {
-    public partial class Loc
+    public partial class Products
     {
-        public Loc()
+        public Products()
         {
             Inventory = new HashSet<Inventory>();
-            Order = new HashSet<Order>();
         }
 
         public int Id { get; set; }
-
+        [Display(Name = "Product Name")]
         public string Name { get; set; }
-        
+        public decimal Price { get; set; }
+
         public virtual ICollection<Inventory> Inventory { get; set; }
-        
-        public virtual ICollection<Order> Order { get; set; }
     }
 }

@@ -18,10 +18,15 @@ namespace WheyMenDAL.Library.Model
         }
 
         public virtual DbSet<Customer> Customer { get; set; }
+        
         public virtual DbSet<Inventory> Inventory { get; set; }
+        
         public virtual DbSet<Loc> Loc { get; set; }
+        
         public virtual DbSet<Order> Order { get; set; }
+        
         public virtual DbSet<OrderItem> OrderItem { get; set; }
+        
         public virtual DbSet<Products> Products { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
