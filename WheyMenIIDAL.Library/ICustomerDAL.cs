@@ -8,6 +8,37 @@ namespace WheyMenDAL.Library
     public interface ICustomerDAL
     {
         /// <summary>
+        /// Removes custs by id
+        /// </summary>
+        /// <param name="id"></param>
+        public void Remove(int id);
+
+        /// <summary>
+        /// Searches custs by id, returns null if not foudn
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Customer FindByID(int id);
+      
+        /// <summary>
+        /// Returns ienumerable of custs
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Customer> GetCusts();
+
+        /// <summary>
+        /// Adds a customer to database
+        /// </summary>
+        /// <param name="cust"></param>
+        public void Add(Customer cust);
+
+        /// <summary>
+        /// Sets customer's state to edited
+        /// </summary>
+        /// <param name="cust"></param>
+        public void Edit(Customer cust);
+
+        /// <summary>
         /// Returns number of customers
         /// </summary>
         /// <returns></returns>

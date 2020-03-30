@@ -11,9 +11,30 @@ namespace WheyMen.DAL
 {
     public class LocationDAL : ILocationDAL
     {
-
-        public LocationDAL(IConfiguration iconfiguration)
+        public IEnumerable<Loc> GetLocs()
         {
+            using var context = new WheyMenContext();
+            return context.Loc;
+        }
+
+        /// <summary>
+        /// Adds a customer to database
+        /// </summary>
+        /// <param name="cust"></param>
+        public void Add(Loc l)
+        {
+            using var context = new WheyMenContext();
+            context.Loc.Add(l);
+        }
+
+        /// <summary>
+        /// Sets location's state to edited
+        /// </summary>
+        /// <param name="cust"></param>
+        public void Edit(Loc l)
+        {
+            using var context = new WheyMenContext();
+            context.Entry(l).State = EntityState.Modified;
         }
         public void UpdateInventory(int id, int qty)
         {

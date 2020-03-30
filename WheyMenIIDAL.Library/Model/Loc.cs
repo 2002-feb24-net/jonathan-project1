@@ -13,11 +13,11 @@ namespace WheyMenDAL.Library.Model
         }
 
         public int Id { get; set; }
-
+        [Display(Name="Location Name")]
+        [MaxLength(50,ErrorMessage ="Max name length is 50")]
         public string Name { get; set; }
-        
+
         public virtual ICollection<Inventory> Inventory { get; set; }
-        
         public virtual ICollection<Order> Order { get; set; }
     }
 }

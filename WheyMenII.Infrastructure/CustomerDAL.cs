@@ -10,31 +10,61 @@ namespace WheyMen.DAL
 {
     public class CustomerDAL : ICustomerDAL
     {
+        readonly WheyMenContext context = new WheyMenContext();
+        public void Remove(int id)
+        {
+            var toRemove = context.Customer.Find(id);
+            context.Customer.Remove(toRemove);
+            context.SaveChanges();
+          
+        }
+        public Customer FindByID(int id)
+        {
+            return context.Customer.Find(id);
+        }
+        public IEnumerable<Customer> GetCusts()
+        {
+            return context.Customer;
+        }
+        /// <summary>
+        /// Adds a customer to database
+        /// </summary>
+        /// <param name="cust"></param>
+        public void Add(Customer cust)
+        {
+            context.Customer.Add(cust);
+            context.SaveChanges();
+
+        }
+
+        /// <summary>
+        /// Sets customer's state to edited
+        /// </summary>
+        /// <param name="cust"></param>
+        public void Edit(Customer cust)
+        {
+            context.Entry(cust).State = EntityState.Modified;
+        }
+
         public int NumberOfCustomers()
         {
-            using(var context = new WheyMenContext())
-            {
-                return context.Customer.ToList().Count;
-            }
-            
+            return context.Customer.ToList().Count;
+
         }
         public bool CheckUnique(int mode, string check)
         {
-            using (var context = new WheyMenContext())
+            if (mode == 1)
             {
-                if (mode == 1)
+                if (context.Customer.Where(c => c.Username==check).ToList().Count==0)
                 {
-                    if (context.Customer.Where(c => c.Username==check).ToList().Count==0)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
-                else if (mode == 2)
+            }
+            else if (mode == 2)
+            {
+                if(context.Customer.Where(c=>c.Email == check).ToList().Count==0)
                 {
-                    if(context.Customer.Where(c=>c.Email == check).ToList().Count==0)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             return false;
@@ -49,17 +79,14 @@ namespace WheyMen.DAL
                 Pwd = pwd,
                 LastName = ln
             };
-            using (var context = new WheyMenContext())
+            try
             {
-                try
-                {
-                    context.Customer.Add(new_cust);
-                    context.SaveChanges();
-                }
-                catch(DbUpdateException)
-                {
-                    Console.WriteLine("Email/username already exists");
-                }
+                context.Customer.Add(new_cust);
+                context.SaveChanges();
+            }
+            catch(DbUpdateException)
+            {
+                Console.WriteLine("Email/username already exists");
             }
             return new_cust.Id;
         }
@@ -137,11 +164,8 @@ namespace WheyMen.DAL
 
         public List<Customer> GetList()
         {
-            using(var context = new WheyMenContext())
-            {
-                var listCustomerModel = context.Customer.ToList();
-                return listCustomerModel;
-            }
+            var listCustomerModel = context.Customer.ToList();
+            return listCustomerModel;
         }
     }
 }

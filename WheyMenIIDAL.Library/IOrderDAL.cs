@@ -2,13 +2,43 @@
 using System.Collections.Generic;
 using System.Text;
 
-using WheyMen.DAL;
 using WheyMenDAL.Library.Model;
 
 namespace WheyMenDAL.Library
 {
     public interface IOrderDAL
     {
+        /// <summary>
+        /// Removes orders by id
+        /// </summary>
+        /// <param name="id"></param>
+        public void Remove(int id);
+
+        /// <summary>
+        /// Searches ords by id, returns null if not foudn
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Order FindByID(int id);
+
+        /// <summary>
+        /// Returns ienumerable of ords
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Order> GetOrds();
+
+        /// <summary>
+        /// Adds an order to database
+        /// </summary>
+        /// <param name="cust"></param>
+        public void Add(Order ord);
+
+        /// <summary>
+        /// Sets order's state to edited
+        /// </summary>
+        /// <param name="cust"></param>
+        public void Edit(Order ord);
+
         /// <summary>
         /// Calls getorders, list of orders searched for given id
         /// </summary>

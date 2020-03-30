@@ -13,30 +13,63 @@ namespace WheyMen.DAL
 {
     public class OrderDAL : IOrderDAL
     {
-
-        public OrderDAL(IConfiguration iconfiguration)
+        readonly WheyMenContext context = new WheyMenContext();
+        
+        public Order FindByID(int id)
         {
+            return context.Order
+                    .Include(o => o.Cust)
+                    .Include(o => o.Loc)
+                    .FirstOrDefault(m=>m.Id==id);
         }
+
+        public void Remove(int id)
+        {
+            var toRemove = context.Order.Find(id);
+            context.Remove(toRemove);
+            context.SaveChanges();
+        }
+
+        public IEnumerable<Order> GetOrds()
+        {
+            return context.Order.Include(o => o.Cust).Include(o => o.Loc);
+        }
+        /// <summary>
+        /// Adds an order to database
+        /// </summary>
+        /// <param name="cust"></param>
+        public void Add(Order o)
+        {
+            context.Order.Add(o);
+        }
+
+        /// <summary>
+        /// Sets order's state to edited
+        /// </summary>
+        /// <param name="cust"></param>
+        public void Edit(Order o)
+        {
+            using var context = new WheyMenContext();
+            context.Entry(o).State = EntityState.Modified;
+        }
+
         //Returns price of added item
         public Decimal AddOrderItem(int oid, int pid, int qty)
         {
-            using(var context = new WheyMenContext())
+            var order_item = new OrderItem
             {
-                var order_item = new OrderItem
-                {
-                    Oid = oid,
-                    Pid = pid,
-                    Qty = qty
-                };
-                context.OrderItem.Add(order_item);
-                context.SaveChanges();
-                var order = context.OrderItem
-                                .Include("P")
-                                .Include("P.P")
-                                .Where(o => o.Pid == pid && o.Id == order_item.Id)
-                                .FirstOrDefault(x => x.Pid == pid);
-                return order.P.P.Price;
-            }
+                Oid = oid,
+                Pid = pid,
+                Qty = qty
+            };
+            context.OrderItem.Add(order_item);
+            context.SaveChanges();
+            var order = context.OrderItem
+                            .Include("P")
+                            .Include("P.P")
+                            .Where(o => o.Pid == pid && o.Id == order_item.Id)
+                            .FirstOrDefault(x => x.Pid == pid);
+            return order.P.P.Price;
         }
 
         public int ValidateOrder(int id)

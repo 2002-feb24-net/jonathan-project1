@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WheyMenII.UI", "WheyMenII\WheyMenII.UI.csproj", "{6AB81F95-448B-4A7B-BDA2-9E8EECF9811F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WheyMenII.DAL", "WheyMenIIDAL.Library\WheyMenII.DAL.csproj", "{DCF63D30-3620-473B-8590-ED739F44CCBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WheyMenII.Domain", "WheyMenIIDAL.Library\WheyMenII.Domain.csproj", "{DCF63D30-3620-473B-8590-ED739F44CCBB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WheyMenII.Test", "WheyMenII.Test\WheyMenII.Test.csproj", "{53EC5180-1EB0-46FC-92EC-AB81129C8D5C}"
 EndProject
