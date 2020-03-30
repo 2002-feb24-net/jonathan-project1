@@ -13,22 +13,12 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CustId" class="control-label"></label>
+                <label asp-for="CustId" class="control-label">E-Mail</label>
                 <select asp-for="CustId" class ="form-control" asp-items="ViewBag.CustId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="LocId" class="control-label"></label>
+                <label asp-for="LocId" class="control-label">Location Name</label>
                 <select asp-for="LocId" class ="form-control" asp-items="ViewBag.LocId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Total" class="control-label"></label>
-                <input asp-for="Total" class="form-control" />
-                <span asp-validation-for="Total" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Timestamp" class="control-label"></label>
-                <input asp-for="Timestamp" class="form-control" />
-                <span asp-validation-for="Timestamp" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

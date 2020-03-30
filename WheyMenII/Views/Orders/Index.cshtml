@@ -19,10 +19,16 @@
                 @Html.DisplayNameFor(model => model.Timestamp)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cust)
+                @Html.DisplayNameFor(model => model.Cust.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Loc)
+                @Html.DisplayNameFor(model => model.Cust.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cust.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Loc.Name)
             </th>
             <th></th>
         </tr>
@@ -38,6 +44,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Cust.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cust.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cust.LastName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Loc.Name)

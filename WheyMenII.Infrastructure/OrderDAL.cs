@@ -30,10 +30,16 @@ namespace WheyMen.DAL
             context.SaveChanges();
         }
 
+        public IEnumerable<Loc> GetLocs()
+        {
+            return context.Loc;
+        }
+
         public IEnumerable<Order> GetOrds()
         {
             return context.Order.Include(o => o.Cust).Include(o => o.Loc);
         }
+
         /// <summary>
         /// Adds an order to database
         /// </summary>
@@ -41,6 +47,7 @@ namespace WheyMen.DAL
         public void Add(Order o)
         {
             context.Order.Add(o);
+            context.SaveChanges();
         }
 
         /// <summary>
@@ -49,8 +56,8 @@ namespace WheyMen.DAL
         /// <param name="cust"></param>
         public void Edit(Order o)
         {
-            using var context = new WheyMenContext();
             context.Entry(o).State = EntityState.Modified;
+            context.SaveChanges();
         }
 
         //Returns price of added item
@@ -88,19 +95,16 @@ namespace WheyMen.DAL
 
         public int CreateOrder(int cid, int lid)
         {
-            using(var context = new WheyMenContext())
+            var new_order = new Order
             {
-                var new_order = new Order
-                {
-                    CustId = cid,
-                    LocId = lid,
-                    Total = 0,
-                    Timestamp = DateTime.Now,
-                };
-                context.Order.Add(new_order);
-                context.SaveChanges();
-                return new_order.Id;
-            }
+                CustId = cid,
+                LocId = lid,
+                Total = 0,
+                Timestamp = DateTime.Now,
+            };
+            context.Order.Add(new_order);
+            context.SaveChanges();
+            return new_order.Id;
         }
 
         //Searches orders by given param, param is checked against Order columns according to mode

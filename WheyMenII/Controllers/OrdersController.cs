@@ -13,6 +13,7 @@ namespace WheyMenII.UI.Controllers
     public class OrdersController : Controller
     {
         private readonly OrderDAL _context = new OrderDAL();
+        private readonly CustomerDAL _custContext = new CustomerDAL();
 
         // GET: Orders
         public IActionResult Index()
@@ -41,8 +42,8 @@ namespace WheyMenII.UI.Controllers
         // GET: Orders/Create
         public IActionResult Create()
         {
-            ViewData["CustId"] = new SelectList(Customer, "Id", "Email");
-            ViewData["LocId"] = new SelectList(Loc, "Id", "Name");
+            ViewData["CustId"] = new SelectList(_custContext.GetCusts(), "Id", "Email");
+            ViewData["LocId"] = new SelectList(_context.GetLocs(), "Id", "Name");
             return View();
         }
 
@@ -51,15 +52,17 @@ namespace WheyMenII.UI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,CustId,LocId,Total,Timestamp")] Order order)
+        public IActionResult Create([Bind("Id,CustId,LocId")] Order order)
         {
             if (ModelState.IsValid)
             {
+                order.Total = 0;
+                order.Timestamp = DateTime.Now;
                 _context.Add(order);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustId"] = new SelectList(_context.Customer, "Id", "Email", order.CustId);
-            ViewData["LocId"] = new SelectList(_context.Loc, "Id", "Name", order.LocId);
+            ViewData["CustId"] = new SelectList(_custContext.GetCusts(), "Id", "Email", order.CustId);
+            ViewData["LocId"] = new SelectList(_context.GetLocs(), "Id", "Name", order.LocId);
             return View(order);
         }
 
@@ -71,13 +74,13 @@ namespace WheyMenII.UI.Controllers
                 return NotFound();
             }
 
-            var order =  _context.Order.FindAsync(id);
+            var order =  _context.FindByID(Convert.ToInt32(id));
             if (order == null)
             {
                 return NotFound();
             }
-            ViewData["CustId"] = new SelectList(_context.Customer, "Id", "Email", order.CustId);
-            ViewData["LocId"] = new SelectList(_context.Loc, "Id", "Name", order.LocId);
+            ViewData["CustId"] = new SelectList(_custContext.GetCusts(), "Id", "Email", order.CustId);
+            ViewData["LocId"] = new SelectList(_context.GetLocs(), "Id", "Name", order.LocId);
             return View(order);
         }
 
@@ -97,8 +100,7 @@ namespace WheyMenII.UI.Controllers
             {
                 try
                 {
-                    _context.Update(order);
-                     _context.SaveChangesAsync();
+                    _context.Edit(order);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -113,8 +115,8 @@ namespace WheyMenII.UI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustId"] = new SelectList(_context.Customer, "Id", "Email", order.CustId);
-            ViewData["LocId"] = new SelectList(_context.Loc, "Id", "Name", order.LocId);
+            ViewData["CustId"] = new SelectList(_custContext.GetCusts(), "Id", "Email", order.CustId);
+            ViewData["LocId"] = new SelectList(_context.GetLocs(), "Id", "Name", order.LocId);
             return View(order);
         }
 
@@ -126,10 +128,7 @@ namespace WheyMenII.UI.Controllers
                 return NotFound();
             }
 
-            var order =  _context.Order
-                .Include(o => o.Cust)
-                .Include(o => o.Loc)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var order = _context.GetOrds();
             if (order == null)
             {
                 return NotFound();
@@ -143,15 +142,14 @@ namespace WheyMenII.UI.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var order =  _context.Order.FindAsync(id);
-            _context.Order.Remove(order);
-             _context.SaveChangesAsync();
+            var order =  _context.FindByID(id);
+            _context.Remove(order.Id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool OrderExists(int id)
         {
-            return _context.Order.Any(e => e.Id == id);
+            return !(_context.FindByID(id) == null);
         }
     }
 }
