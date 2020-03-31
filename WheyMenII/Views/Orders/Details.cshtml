@@ -23,19 +23,54 @@
             @Html.DisplayFor(model => model.Timestamp)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cust)
+            @Html.DisplayNameFor(model => model.Cust.Email)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Cust.Email)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Loc)
+            @Html.DisplayNameFor(model => model.Loc.Name)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Loc.Name)
         </dd>
     </dl>
 </div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderItem.First().P.P.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderItem.First().P.P.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderItem.First().Qty)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItem)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem=>item.P.P.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem=>item.P.P.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem=>item.Qty)
+                </td>
+            </tr>
+        }
+    </tbody>
+    
+</table>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>

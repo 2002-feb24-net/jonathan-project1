@@ -20,6 +20,8 @@ namespace WheyMen.DAL
             return context.Order
                     .Include(o => o.Cust)
                     .Include(o => o.Loc)
+                    .Include("OrderItem.P")
+                    .Include("OrderItem.P.P")
                     .FirstOrDefault(m=>m.Id==id);
         }
 

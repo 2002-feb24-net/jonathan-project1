@@ -149,7 +149,7 @@ namespace WheyMenII.UI.Controllers
                 return NotFound();
             }
 
-            var order = _context.GetOrds();
+            var order = _context.FindByID(Convert.ToInt32(id));
             if (order == null)
             {
                 return NotFound();
