@@ -26,10 +26,20 @@ namespace WheyMenII.UI.Controllers
             _locContext = lDAL;
         }
 
-        // GET: Orders
-        public IActionResult Index()
+      
+
+        public async Task<IActionResult> SearchLocOrders(string locName)
         {
-            var wheyMenContext = _context.GetOrds();
+            return View("Index", await _context.GetOrders(1, locName));
+        }
+        public async Task<IActionResult> SearchCustOrders(string firstName, string lastName)
+        {
+            return View("Index", await _context.GetOrders(2,firstName,lastName));
+        }
+        // GET: Orders
+        public async Task<IActionResult> Index()
+        {
+            var wheyMenContext = await _context.GetOrds();
             return View(wheyMenContext.ToList());
         }
 
@@ -71,9 +81,10 @@ namespace WheyMenII.UI.Controllers
         }
 
         // GET: Orders/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CustId"] = new SelectList(_custContext.GetCusts(), "Id", "Email");
+            IEnumerable<Customer> custsEnum = await _custContext.GetCusts();
+            ViewData["CustId"] = new SelectList(await _custContext.GetCusts(), "Id", "Email");
             ViewData["LocId"] = new SelectList(_context.GetLocs(), "Id", "Name");
             return View();
         }
@@ -98,7 +109,7 @@ namespace WheyMenII.UI.Controllers
         }
 
         // GET: Orders/Edit/5
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -110,7 +121,8 @@ namespace WheyMenII.UI.Controllers
             {
                 return NotFound();
             }
-            ViewData["CustId"] = new SelectList(_custContext.GetCusts(), "Id", "Email", order.CustId);
+            IEnumerable<Customer> custEnum = await _custContext.GetCusts();
+            ViewData["CustId"] = new SelectList(custEnum, "Id", "Email", order.CustId);
             ViewData["LocId"] = new SelectList(_context.GetLocs(), "Id", "Name", order.LocId);
             return View(order);
         }
@@ -120,7 +132,7 @@ namespace WheyMenII.UI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,CustId,LocId,Total,Timestamp")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CustId,LocId,Total,Timestamp")] Order order)
         {
             if (id != order.Id)
             {
@@ -146,7 +158,8 @@ namespace WheyMenII.UI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustId"] = new SelectList(_custContext.GetCusts(), "Id", "Email", order.CustId);
+            IEnumerable<Customer> custEnum = await _custContext.GetCusts();
+            ViewData["CustId"] = new SelectList(custEnum, "Id", "Email", order.CustId);
             ViewData["LocId"] = new SelectList(_context.GetLocs(), "Id", "Name", order.LocId);
             return View(order);
         }

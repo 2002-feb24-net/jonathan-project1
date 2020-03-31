@@ -21,14 +21,13 @@ namespace WheyMenII.UI
         }
         public IActionResult Search(string SearchFirstName, string SearchLastName)
         {
-            Console.WriteLine($"{SearchFirstName} {SearchLastName}");
             return View(_context.SearchCust(1, SearchFirstName, SearchLastName));
         }
 
         // GET: Customers
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(_context.GetCusts());
+            return View(await _context.GetCusts());
         }
 
         // GET: Customers/Details/5

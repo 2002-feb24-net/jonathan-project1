@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using WheyMen.Domain;
 using WheyMen.Domain.Model;
 
@@ -22,9 +22,9 @@ namespace WheyMen.Infrastructure
         {
             return context.Customer.Find(id);
         }
-        public IEnumerable<Customer> GetCusts()
+        public async Task<IEnumerable<Customer>> GetCusts()
         {
-            return context.Customer;
+            return await context.Customer.ToListAsync();
         }
         /// <summary>
         /// Adds a customer to database

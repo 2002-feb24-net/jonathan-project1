@@ -4,11 +4,45 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Orders</h1>
+<div id="function-continer">
+    <div id="function-buttons">
+        <button id="search-cust-orders">Search Customer Orders</button>
+        <button id="search-loc-orders">Search Location Orders</button>
+        <a asp-action="Create" class="button">Create an Order</a>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+    </div>
+    <div id="function-inputs">
+        @using (Html.BeginForm("SearchLocOrders"))
+        {
+            <input type="text" class="search-loc" style="display:none;" name="locName" placeholder="Location Name" />
+
+            <input asp-action="SearchLocOrders" class="search-loc" type="submit" value="Search" style="display:none;" id="search-loc-begin" />
+        }
+        @using (Html.BeginForm("SearchCustOrders"))
+        {
+            <input type="text" class="search-cust" style="display:none;" name="firstName" placeholder="First Name" />
+            <input type="text" class="search-cust" style="display:none;" name="lastName" placeholder="Last Name" />
+            <input asp-action="SearchCustOrders" class="search-cust" search-loc" type="submit" value="Search" style="display:none;" id="search-cust-begin" />
+        }
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        @section scripts{
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('#search-cust-orders').click(function () {
+                        $('.search-cust').show(100);
+                    });
+                });
+                $(document).ready(function () {
+                    $('#search-loc-orders').click(function () {
+                        $('.search-loc').show(100);
+                    });
+                });
+            </script>
+        }
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>

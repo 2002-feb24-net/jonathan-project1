@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Threading.Tasks;
 using WheyMen.Domain.Model;
 
 namespace WheyMen.Domain
@@ -26,7 +26,7 @@ namespace WheyMen.Domain
         /// Returns ienumerable of ords
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Order> GetOrds();
+        public Task<IEnumerable<Order>> GetOrds();
 
         /// <summary>
         /// Adds an order to database
@@ -46,7 +46,7 @@ namespace WheyMen.Domain
         /// </summary>
         /// <param name="id"></param>
         /// <returns>-1 if order does not exist, order id otherwise</returns>
-        int ValidateOrder(int id);
+        Task<int> ValidateOrder(int id);
         /// <summary>
         /// Runs sp_create_ord and assisgns cid, lid params
         /// </summary>
@@ -69,6 +69,6 @@ namespace WheyMen.Domain
         /// <param name="mode">1: orders for a location, 2: orders for a given customer, 3: specific order, default: all orders
         /// </param>
         /// <returns></returns>
-        List<Order> GetOrders(string search_param, int mode = 0);
+        Task<List<Order>> GetOrders(int mode = 0,params string[] search_param);
     }
 }

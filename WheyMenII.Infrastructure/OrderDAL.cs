@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 using WheyMen.Domain;
 using WheyMen.Domain.Model;
-
+using System.Threading.Tasks;
 
 namespace WheyMen.Infrastructure
 {
@@ -37,9 +37,9 @@ namespace WheyMen.Infrastructure
             return context.Loc;
         }
 
-        public IEnumerable<Order> GetOrds()
+        public async Task<IEnumerable<Order>> GetOrds()
         {
-            return context.Order.Include(o => o.Cust).Include(o => o.Loc);
+            return await context.Order.Include(o => o.Cust).Include(o => o.Loc).ToListAsync();
         }
 
         /// <summary>
@@ -71,9 +71,9 @@ namespace WheyMen.Infrastructure
             context.SaveChanges();
         }
 
-        public int ValidateOrder(int id)
+        public async Task<int> ValidateOrder(int id)
         {
-            var ordList = GetOrders("");
+            var ordList = await GetOrders();
             foreach(var order in ordList)
             {
                 if(id>0&&order.Id == id)
@@ -104,58 +104,34 @@ namespace WheyMen.Infrastructure
         //  1: Get orders by location
         //  2: By customer
         //  3: Get details of 1 specific order
-        public List<Order> GetOrders(string search_param,int mode=0)
+        public async Task<List<Order>> GetOrders(int mode=0, params string[] search_param)
         {
-            
-            var ordersList = new List<Order>();
-            int id = int.Parse(search_param);
+            var orderList = context.Order.Include("Loc").Include("Cust").AsQueryable();
             using(var context = new WheyMenContext())
             {
                 switch (mode)
                 {
                     case 1:
-                        ordersList = context.Order
-                                        .Where(o => o.LocId == id)
-                                        .Include("OrderItem")
-                                        .Include("OrderItem.P")
-                                        .Include("OrderItem.P.P")
-                                        .Include("Loc")
-                                        .Include("Cust")
-                                        .ToList();
-                            
-                            
+                        orderList = orderList
+                        .Where(o => o.Loc.Name == search_param[0]);
                         break;
                     case 2:
-                        ordersList = context.Order
-                                       .Where(o => o.CustId == id)
-                                       .Include("OrderItem")
-                                       .Include("OrderItem.P")
-                                       .Include("OrderItem.P.P")
-                                       .Include("Loc")
-                                       .Include("Cust")
-                                       .ToList();
+                        orderList = orderList
+                        .Where(o => o.Cust.Name == search_param[0] && o.Cust.LastName == search_param[1] );
                         break;
                     case 3:
-                        ordersList = context.Order
-                                       .Where(o => o.Id == id)
-                                       .Include("OrderItem")
-                                       .Include("OrderItem.P")
-                                       .Include("OrderItem.P.P")
-                                       .Include("Loc")
-                                       .Include("Cust")
-                                       .ToList();
+                        orderList = orderList
+                        .Where(o => o.Id == Convert.ToInt32(search_param[0]));
                         break;
                     default:
-                        ordersList = context.Order.Include("OrderItem")
-                                       .Include("OrderItem.P")
-                                       .Include("OrderItem.P.P")
-                                       .Include("Loc")
-                                       .Include("Cust")
-                                       .ToList();
                         break;
                 }
             }
-            return ordersList;
+            return await orderList
+                        .Include("OrderItem")
+                        .Include("OrderItem.P")
+                        .Include("OrderItem.P.P")
+                        .ToListAsync();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 using WheyMen.Domain.Model;
 
 namespace WheyMen.Domain
@@ -24,7 +24,7 @@ namespace WheyMen.Domain
         /// Returns ienumerable of custs
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Customer> GetCusts();
+        public Task<IEnumerable<Customer>> GetCusts();
 
         /// <summary>
         /// Adds a customer to database
