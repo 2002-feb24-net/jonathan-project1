@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using WheyMenDAL.Library;
-using WheyMenDAL.Library.Model;
+using WheyMen.Domain;
+using WheyMen.Domain.Model;
 
-namespace WheyMen.DAL
+namespace WheyMen.Infrastructure
 {
     public class LocationDAL : ILocationDAL
     {

@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-using WheyMenDAL.Library.Model;
+using WheyMen.Domain.Model;
 
-namespace WheyMenDAL.Library
+namespace WheyMen.Domain
 {
     public interface IOrderDAL
     {
+        public IEnumerable<Loc> GetLocs();
         /// <summary>
         /// Removes orders by id
         /// </summary>

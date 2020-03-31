@@ -3,8 +3,9 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
+using WheyMen.Domain.Model;
 
-namespace WheyMenDAL.Library.Model
+namespace WheyMen.Infrastructure
 {
     public partial class WheyMenContext : DbContext
     {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-using WheyMenDAL.Library.Model;
+using WheyMen.Domain.Model;
 
-namespace WheyMenDAL.Library
+namespace WheyMen.Domain
 {
     public interface ILocationDAL
     {

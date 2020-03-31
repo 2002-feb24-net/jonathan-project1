@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using WheyMenDAL.Library.Model;
+using WheyMen.Domain.Model;
 
-namespace WheyMenDAL.Library
+namespace WheyMen.Domain
 {
     public interface ICustomerDAL
     {

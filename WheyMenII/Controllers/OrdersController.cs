@@ -5,16 +5,26 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using WheyMen.DAL;
-using WheyMenDAL.Library.Model;
+
+using WheyMen.Infrastructure;
+using WheyMen.Domain;
+using WheyMen.Domain.Model;
 
 namespace WheyMenII.UI.Controllers
 {
     public class OrdersController : Controller
     {
-        private readonly OrderDAL _context = new OrderDAL();
-        private readonly CustomerDAL _custContext = new CustomerDAL();
-        private readonly LocationDAL _locContext = new LocationDAL();
+
+        private readonly IOrderDAL _context;
+        private readonly ICustomerDAL _custContext;
+        private readonly ILocationDAL _locContext;
+
+        public OrdersController(IOrderDAL oDAL,ICustomerDAL cDAL, ILocationDAL lDAL)
+        {
+            _context = oDAL;
+            _custContext = cDAL;
+            _locContext = lDAL;
+        }
 
         // GET: Orders
         public IActionResult Index()

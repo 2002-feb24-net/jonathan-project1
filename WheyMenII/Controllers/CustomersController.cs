@@ -5,15 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using WheyMen.DAL;
-using WheyMenDAL.Library.Model;
+
+using WheyMen.Infrastructure;
+using WheyMen.Domain;
+using WheyMen.Domain.Model;
 
 namespace WheyMenII.UI
 {
     public class CustomersController : Controller
     {
-        private CustomerDAL _context = new CustomerDAL();
-
+        private ICustomerDAL _context;
+        public CustomersController(ICustomerDAL cDAL)
+        {
+            _context = cDAL;
+        }
         public IActionResult Search(string SearchFirstName, string SearchLastName)
         {
             Console.WriteLine($"{SearchFirstName} {SearchLastName}");

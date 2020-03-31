@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WheyMenDAL.Library.Model
+namespace WheyMen.Domain.Model
 {
     public partial class OrderItem
     {
