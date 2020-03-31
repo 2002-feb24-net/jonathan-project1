@@ -1,25 +1,27 @@
-﻿@model WheyMenDAL.Library.Model.Order
+﻿@model WheyMenDAL.Library.Model.OrderItem
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "CreateOrderItem";
 }
 
-<h1>Start Order:</h1>
+<h1>Create Order Item</h1>
 
-<h4>Customer Info</h4>
+<h4>Order Item</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateOrderItem">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CustId" class="control-label">E-Mail</label>
-                <select asp-for="CustId" class ="form-control" asp-items="ViewBag.CustId"></select>
+                <label asp-for="Pid" class="control-label">Product Name</label>
+                <select asp-for="Pid" class="form-control" asp-items="ViewBag.Pid"></select>
             </div>
             <div class="form-group">
-                <label asp-for="LocId" class="control-label">Location Name</label>
-                <select asp-for="LocId" class ="form-control" asp-items="ViewBag.LocId"></select>
+                <label asp-for="Qty" class="control-label"></label>
+                <input asp-for="Qty" class="form-control" />
+                <span asp-validation-for="Qty" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

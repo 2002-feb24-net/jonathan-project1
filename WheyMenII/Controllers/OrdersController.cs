@@ -14,12 +14,33 @@ namespace WheyMenII.UI.Controllers
     {
         private readonly OrderDAL _context = new OrderDAL();
         private readonly CustomerDAL _custContext = new CustomerDAL();
+        private readonly LocationDAL _locContext = new LocationDAL();
 
         // GET: Orders
         public IActionResult Index()
         {
             var wheyMenContext = _context.GetOrds();
             return View(wheyMenContext.ToList());
+        }
+
+        public IActionResult CreateOrderItem()
+        {
+            int storeID = Convert.ToInt32(TempData["StoreID"]);
+            ViewData["Pid"] = new SelectList(_locContext.GetInventory(storeID), "Id","P.Name");
+            return View("CreateOrderItem");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateOrderItem([Bind("Oid","Qty","Id","Pid")] OrderItem item)
+        {
+            int orderID = Convert.ToInt32(TempData["OrderID"]);
+            if(ModelState.IsValid)
+            {
+                item.Oid = orderID;
+                _context.AddOrderItem(item);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Orders/Details/5
@@ -58,12 +79,12 @@ namespace WheyMenII.UI.Controllers
             {
                 order.Total = 0;
                 order.Timestamp = DateTime.Now;
-                _context.Add(order);
-                return RedirectToAction(nameof(Index));
+                TempData["OrderID"] = _context.Add(order);
+                TempData["StoreID"] = order.LocId;
+                return RedirectToAction("CreateOrderItem",new { store_id = 1});
             }
-            ViewData["CustId"] = new SelectList(_custContext.GetCusts(), "Id", "Email", order.CustId);
-            ViewData["LocId"] = new SelectList(_context.GetLocs(), "Id", "Name", order.LocId);
-            return View(order);
+            
+            return View();
         }
 
         // GET: Orders/Edit/5

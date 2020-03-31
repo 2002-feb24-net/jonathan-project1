@@ -96,42 +96,27 @@ namespace WheyMen.DAL
         //  1: Search by name
         //  2: username
         //  default: email
-        public Customer SearchCust(int mode=0,params string[] search_param)
+        public IEnumerable<Customer> SearchCust(int mode=0,params string[] search_param)
         {
-            var CustList = GetList();
-            foreach(var cust in CustList)
+            if (mode == 1)
             {
-                if (mode == 0)
-                {
-                    if ((cust.Name == search_param[0] && cust.LastName == search_param[1]))
-                    {
-                        return cust;
-                    }
-                }
-                else if(mode ==1)
-                {
-                    if(cust.Username==search_param[0] || cust.Email == search_param[0])
-                    {
-                        return cust;
-                    }
-                }
-                else
-                {
-                    if(cust.Email==search_param[0])
-                    {
-                        return cust;
-                    }
-                }
+                return context.Customer.Where(cust => cust.Name == search_param[0] && cust.LastName == search_param[1]);
             }
-            return null;
-            
+            else if(mode == 2)
+            {
+                return context.Customer.Where(cust => cust.Username == search_param[0]);
+            }
+            else
+            {
+                return context.Customer.Where(cust => cust.Email == search_param[0]);   
+            }
         }
 
         //assigns id of verified customer -1 if does not exist/invalid etc.
         //returns actual pwd of customer
         public string VerifyCustomer(string username,out int id)
         {
-            var cust = SearchCust(1,username);
+            var cust = SearchCust(1,username).First();
             if(cust==null)
             {
                 id = -1;

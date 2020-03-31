@@ -66,7 +66,7 @@ namespace WheyMenDAL.Library
         /// <param name="mode">Search mode: 1 - By name, 2 - By username</param>
         /// <param name="search_param">name/username to search by</param>
         /// <returns></returns>
-        Customer SearchCust(int mode = 0,params string[] search_param);
+        IEnumerable<Customer> SearchCust(int mode = 0,params string[] search_param);
        
         //Retrieves actual pwd of customer returns id of matching username
        /// <summary>

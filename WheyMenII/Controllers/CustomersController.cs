@@ -14,6 +14,12 @@ namespace WheyMenII.UI
     {
         private CustomerDAL _context = new CustomerDAL();
 
+        public IActionResult Search(string SearchFirstName, string SearchLastName)
+        {
+            Console.WriteLine($"{SearchFirstName} {SearchLastName}");
+            return View(_context.SearchCust(1, SearchFirstName, SearchLastName));
+        }
+
         // GET: Customers
         public IActionResult Index()
         {

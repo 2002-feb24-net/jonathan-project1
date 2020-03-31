@@ -31,7 +31,8 @@ namespace WheyMenDAL.Library
         /// Adds an order to database
         /// </summary>
         /// <param name="cust"></param>
-        public void Add(Order ord);
+        /// <returns>id of added order</returns>
+        public int Add(Order ord);
 
         /// <summary>
         /// Sets order's state to edited
@@ -58,8 +59,7 @@ namespace WheyMenDAL.Library
         /// <param name="oid">order id</param>
         /// <param name="pid">product id</param>
         /// <param name="qty">quantity </param>
-        /// <returns>Price of added item</returns>
-        Decimal AddOrderItem(int oid, int pid, int qty);
+        void AddOrderItem(OrderItem item);
 
         /// <summary>
         /// Retrieves all orders from db by given search parameter and id

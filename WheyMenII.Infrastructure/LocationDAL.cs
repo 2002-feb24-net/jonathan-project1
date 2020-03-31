@@ -11,9 +11,9 @@ namespace WheyMen.DAL
 {
     public class LocationDAL : ILocationDAL
     {
+        private readonly WheyMenContext context = new WheyMenContext();
         public IEnumerable<Loc> GetLocs()
         {
-            using var context = new WheyMenContext();
             return context.Loc;
         }
 
@@ -23,7 +23,6 @@ namespace WheyMen.DAL
         /// <param name="cust"></param>
         public void Add(Loc l)
         {
-            using var context = new WheyMenContext();
             context.Loc.Add(l);
         }
 
@@ -33,43 +32,28 @@ namespace WheyMen.DAL
         /// <param name="cust"></param>
         public void Edit(Loc l)
         {
-            using var context = new WheyMenContext();
             context.Entry(l).State = EntityState.Modified;
         }
         public void UpdateInventory(int id, int qty)
         {
-            using (var context = new WheyMenContext())
-            {
-                var to_update = context.Inventory.Find(id);
-                to_update.Qty -= qty;
-                context.SaveChanges();
-            }
+            var to_update = context.Inventory.Find(id);
+            to_update.Qty -= qty;
+            context.SaveChanges();
         }
         public List<Inventory> GetInventory(int id)
         {
             var listInventoryModel = new List<Inventory>();
-            using (var context = new WheyMenContext())
-            {
-                listInventoryModel = context.Inventory
-                                                .Include("P")
-                                                .Where(i => i.StoreId == id)
-                                                .ToList();
+            listInventoryModel = context.Inventory
+                                            .Include("P")
+                                            .Where(i => i.StoreId == id)
+                                            .ToList();
 
-            }
             return listInventoryModel;
         }
 
         public List<Loc> GetList()
         {
-
-
-            var listLocationModel = new List<Loc>();
-            using (var context = new WheyMenContext())
-            {
-                listLocationModel = context.Loc.ToList();
-            }
-
-            return listLocationModel;
+            return context.Loc.ToList();
         }
     }
 }

@@ -44,10 +44,12 @@ namespace WheyMen.DAL
         /// Adds an order to database
         /// </summary>
         /// <param name="cust"></param>
-        public void Add(Order o)
+        public int Add(Order o)
         {
             context.Order.Add(o);
             context.SaveChanges();
+            context.Entry(o).Reload();
+            return o.Id;
         }
 
         /// <summary>
@@ -61,22 +63,10 @@ namespace WheyMen.DAL
         }
 
         //Returns price of added item
-        public Decimal AddOrderItem(int oid, int pid, int qty)
+        public void AddOrderItem(OrderItem item)
         {
-            var order_item = new OrderItem
-            {
-                Oid = oid,
-                Pid = pid,
-                Qty = qty
-            };
-            context.OrderItem.Add(order_item);
+            context.OrderItem.Add(item);
             context.SaveChanges();
-            var order = context.OrderItem
-                            .Include("P")
-                            .Include("P.P")
-                            .Where(o => o.Pid == pid && o.Id == order_item.Id)
-                            .FirstOrDefault(x => x.Pid == pid);
-            return order.P.P.Price;
         }
 
         public int ValidateOrder(int id)

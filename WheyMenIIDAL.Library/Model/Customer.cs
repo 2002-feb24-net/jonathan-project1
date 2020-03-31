@@ -25,7 +25,7 @@ namespace WheyMenDAL.Library.Model
         [Display(Name = "E-mail")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Username address is required")]
+        [Required(ErrorMessage = "Username is required")]
         [MaxLength(30,ErrorMessage ="Maximum username lenght is 30")]
         public string Username { get; set; }
 
@@ -34,6 +34,7 @@ namespace WheyMenDAL.Library.Model
         [MaxLength(100, ErrorMessage = "Maximum password length is 100")]
         [ScaffoldColumn(false)]
         [DataType(DataType.Password)]
+        [Required(ErrorMessage ="Password is required")]
         public string Pwd { get; set; }
 
         [Display(Name = "Last Name")]

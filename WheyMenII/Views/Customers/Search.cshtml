@@ -1,6 +1,6 @@
-﻿@model IEnumerable<WheyMenDAL.Library.Model.Customer> 
+﻿@model IEnumerable<WheyMenDAL.Library.Model.Customer>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Search";
 }
 
 <head>
@@ -14,18 +14,14 @@
         <button>
             <a asp-action="Create">Create New</a>
         </button>
-        
+
     </div>
     <div id="function-inputs">
-        @using (Html.BeginForm("Search"))
-        {
-            <input type="text" id="search-input-fn" style="display:none;" name="SearchFirstName" placeholder="First Name" />
-            <input type="text" id="search-input-ln" style="display:none;" name="SearchLastName" placeholder="Last Name" />
-            <input asp-action="Search" type="submit" value="Search" style="display:none;" id="search-begin"/>
-       
-        }
-
-
+        <input type="text" id="search-input-fn" style="display:none;" name="SearchFirstName" placeholder="First Name" />
+        <input type="text" id="search-input-ln" style="display:none;" name="SearchLastName" placeholder="Last Name" />
+        <button>
+            <a asp-action="Search" style="display:none;" id="search-begin">Begin Search</a>
+        </button>
 
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         @section scripts{
@@ -61,26 +57,27 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Username)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Username)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
