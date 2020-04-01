@@ -37,10 +37,11 @@ namespace WheyMen.Domain.Model
         public string Email { get; set; }
 
         /// <summary>
-        /// Customer's user name, has sa maximum length of 30
+        /// Customer's user name, has a maximum length of 30
         /// </summary>
         [Required(ErrorMessage = "Username is required")]
-        [MaxLength(30,ErrorMessage ="Maximum username lenght is 30")]
+        [MaxLength(30,ErrorMessage ="Maximum username length is 30")]
+        [MinLength(3,ErrorMessage = "Minimum username length is 3")]
         public string Username { get; set; }
     
         /// <summary>

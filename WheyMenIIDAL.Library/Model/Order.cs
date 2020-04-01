@@ -34,7 +34,7 @@ namespace WheyMen.Domain.Model
         /// Time order wwas created client side
         /// </summary>
         public DateTime Timestamp { get; set; }
-        
+
         /// <summary>
         /// Navigation property to ordering customer
         /// </summary>

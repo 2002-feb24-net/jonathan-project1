@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -94,36 +95,6 @@ namespace WheyMenII.UI.Controllers
             }
             ModelState.AddModelError("QuantityError", "Invalid quantity entered, please try again");
             return View(InitCOVM(storeID));
-            ////store storeid from previous failed order and current qty (overwritten when assigning to previous item)
-            //int storeID = Convert.ToInt32(TempData["StoreID"]);
-            //TempData["StoreID"] = storeID;
-            //int qty = item.Qty;
-
-            ////validate current item's qty
-            //if (ModelState.IsValid && item.ValidateQuantity(_locContext.GetQty(item.Pid)))
-            //{
-            //    //retrieve old oid,pid from failed order
-            //    if (TempData["Item"] != null)
-            //    {
-            //        item = JsonConvert.DeserializeObject<OrderItem>((string)TempData["Item"]);
-            //        TempData["Item"] = null;
-            //    }
-            //    //set old failed qty to current entered qty
-            //    item.Qty = qty;
-            //    //update prod qty, set correspodning order id (always passed) 
-            //    _locContext.UpdateInventory(item.Pid, qty);
-            //    item.Oid = Convert.ToInt32(TempData["OrderID"]);
-            //    _context.AddOrderItem(item);
-            //    logger.LogInformation($"Adding item to {1}", item.Oid);
-            //    if (TempData["Continue"] != null)
-            //    {
-            //        return View(InitCOVM(storeID));
-            //    }
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //ModelState.AddModelError("QuantityError", "Invalid quantity entered, please try again");
-            //TempData["Item"] = JsonConvert.SerializeObject(item);
-            //return View(InitCOVM(storeID));
         }
 
         // GET: Orders/Details/5
@@ -133,22 +104,22 @@ namespace WheyMenII.UI.Controllers
             {
                 return NotFound();
             }
-
             var order = _context.FindByID(Convert.ToInt32(id));
             if (order == null)
             {
                 return NotFound();
             }
-
             return View(order);
         }
 
         // GET: Orders/Create
         public async Task<IActionResult> Create()
         {
+            if(TempData["VerificationError"]!=null && (bool)TempData["VerificationError"]==true)
+            {
+                ModelState.AddModelError("VerificationError", "Invalid username/password combination, please try again.");
+            }
             logger.LogInformation("Creating order");
-            IEnumerable<Customer> custsEnum = await _custContext.GetCusts();
-            //ViewData["CustId"] = new SelectList(await _custContext.GetCusts(), "Id", "Email");
             ViewData["LocId"] = new SelectList(_context.GetLocs(), "Id", "Name");
             return View();
         }
@@ -158,29 +129,34 @@ namespace WheyMenII.UI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,CustId,LocId")] Order order,string Username,string Password)
+        public IActionResult Create([Bind("Id,CustId,LocId,Username,Pwd")] OrderViewModel order)
         {
+            string Username = order.Username, Password = order.Pwd;
             if (ModelState.IsValid)
             {
-                int cid = 0;
+                int cid;
                 if (Password == (_custContext.VerifyCustomer(Username, out cid)))
                 {
-                    order.CustId = cid;
-                    order.Total = 0;
-                    order.Timestamp = DateTime.Now;
-                    TempData["OrderID"] = _context.Add(order);
+                    var new_order = new Order
+                    {
+                        LocId = order.LocId,
+                        //Cust = _custContext.FindByID(cid),
+                        CustId = cid,
+                        Total = 0,
+                        Timestamp = DateTime.Now
+                    };
+                    TempData["OrderID"] = _context.Add(new_order);
                     TempData["StoreID"] = order.LocId;
                     logger.LogInformation("Order successfully recreated");
                     return RedirectToAction("CreateOrderItem");
                 }
                 else
                 {
-                    ModelState.AddModelError("QuantityError", "Invalid username/password, please try again");
+                    TempData["VerificationError"] = true;
                     return RedirectToAction("Create");
                 }
             }
-            
-            return View();
+            return View(order);
         }
 
         // GET: Orders/Edit/5

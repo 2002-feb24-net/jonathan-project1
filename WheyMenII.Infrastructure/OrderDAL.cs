@@ -27,9 +27,16 @@ namespace WheyMen.Infrastructure
 
         public void Remove(int id)
         {
-            var toRemove = context.Order.Find(id);
-            context.Remove(toRemove);
-            context.SaveChanges();
+            try
+            {
+                var toRemove = context.Order.Find(id);
+                context.Remove(toRemove);
+                context.SaveChanges();
+            }
+            catch(DbUpdateException)
+            {
+                return;
+            }
         }
 
         public IEnumerable<Loc> GetLocs()

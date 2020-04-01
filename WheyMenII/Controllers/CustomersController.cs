@@ -61,8 +61,6 @@ namespace WheyMenII.UI
         {
             if (ModelState.IsValid)
             {
-                //_context.Add(customer);
-                //await _context.SaveChangesAsync();
                 _context.Add(customer);
                 logger.LogInformation($"Successfully created customer");
                 return RedirectToAction(nameof(Index));

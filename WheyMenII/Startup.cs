@@ -1,18 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 using WheyMen.Infrastructure;
 using WheyMen.Domain;
 using Microsoft.Extensions.Logging;
-using WheyMenII.UI.Controllers;
-using WheyMenII.UI;
 
 namespace WheyMenII
 {
@@ -42,7 +36,12 @@ namespace WheyMenII
             services.AddTransient<IOrderDAL, OrderDAL>();
             services.AddTransient<ICustomerDAL, CustomerDAL>();
             services.AddTransient<ILocationDAL, LocationDAL>();
-            services.AddLogging();
+            services.AddLogging(logger=>
+            {
+                logger.AddConfiguration(Configuration.GetSection("Logging"));
+                logger.AddConsole();
+                logger.AddDebug();
+            });
             services.AddControllersWithViews();
         }
 
