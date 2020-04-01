@@ -6,12 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
-using WheyMen.Infrastructure;
 using WheyMen.Domain;
 using WheyMen.Domain.Model;
-using System.Dynamic;
 using WheyMenII.UI.Models;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 
 namespace WheyMenII.UI.Controllers
 {
@@ -21,20 +20,24 @@ namespace WheyMenII.UI.Controllers
         private readonly IOrderDAL _context;
         private readonly ICustomerDAL _custContext;
         private readonly ILocationDAL _locContext;
+        private readonly ILogger logger;
 
-        public OrdersController(IOrderDAL oDAL,ICustomerDAL cDAL, ILocationDAL lDAL)
+        public OrdersController(IOrderDAL oDAL,ICustomerDAL cDAL, ILocationDAL lDAL,ILogger<OrdersController> logger)
         {
             _context = oDAL;
             _custContext = cDAL;
             _locContext = lDAL;
+            this.logger = logger;
         }
 
         public async Task<IActionResult> SearchLocOrders(string locName)
         {
+            logger.LogInformation($"Finding orders for location: {1}", locName);
             return View("Index", await _context.GetOrders(1, locName));
         }
         public async Task<IActionResult> SearchCustOrders(string firstName, string lastName)
         {
+            logger.LogInformation($"Finding orders for customer: {1} {2}", firstName, lastName);
             return View("Index", await _context.GetOrders(2,firstName,lastName));
         }
         // GET: Orders
@@ -44,6 +47,11 @@ namespace WheyMenII.UI.Controllers
             return View(wheyMenContext.ToList());
         }
 
+        /// <summary>
+        /// Gets inventory for a location to display hwen adding order items
+        /// </summary>
+        /// <param name="storeID"></param>
+        /// <returns></returns>
         private CreateOrderViewModel InitCOVM(int storeID)
         {
             var inventoryItemModel = new CreateOrderViewModel
@@ -65,6 +73,7 @@ namespace WheyMenII.UI.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CreateOrderItem([Bind("Oid","Qty","Id","Pid")] OrderItem item)
         {
+            
             if (ModelState.IsValid && item.ValidateQuantity( _locContext.GetQty(item.Pid)))
             {
                 int qty = item.Qty;
@@ -75,6 +84,7 @@ namespace WheyMenII.UI.Controllers
                 _locContext.UpdateInventory(item.Pid, qty);
                 item.Oid = Convert.ToInt32(TempData["OrderID"]);
                 _context.AddOrderItem(item);
+                logger.LogInformation($"Adding item to {1}", item.Oid);
                 return RedirectToAction(nameof(Index));
             }
             ModelState.AddModelError("QuantityError", "Invalid quantity entered, please try again");
@@ -104,6 +114,7 @@ namespace WheyMenII.UI.Controllers
         // GET: Orders/Create
         public async Task<IActionResult> Create()
         {
+            logger.LogInformation("Creating order");
             IEnumerable<Customer> custsEnum = await _custContext.GetCusts();
             ViewData["CustId"] = new SelectList(await _custContext.GetCusts(), "Id", "Email");
             ViewData["LocId"] = new SelectList(_context.GetLocs(), "Id", "Name");
@@ -123,6 +134,7 @@ namespace WheyMenII.UI.Controllers
                 order.Timestamp = DateTime.Now;
                 TempData["OrderID"] = _context.Add(order);
                 TempData["StoreID"] = order.LocId;
+                logger.LogInformation("Order successfully recreated");
                 return RedirectToAction("CreateOrderItem",new { store_id = 1});
             }
             
@@ -188,6 +200,7 @@ namespace WheyMenII.UI.Controllers
         // GET: Orders/Delete/5
         public IActionResult Delete(int? id)
         {
+            logger.LogInformation($"Attempting to delete order {1}", id);
             if (id == null)
             {
                 return NotFound();
@@ -198,6 +211,8 @@ namespace WheyMenII.UI.Controllers
             {
                 return NotFound();
             }
+            _context.Remove(order.Id);
+            logger.LogInformation($"Successfully removed order {1}", id);
 
             return View(order);
         }

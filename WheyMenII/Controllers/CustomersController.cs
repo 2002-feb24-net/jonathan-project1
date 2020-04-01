@@ -1,26 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
-using WheyMen.Infrastructure;
 using WheyMen.Domain;
 using WheyMen.Domain.Model;
+using Microsoft.Extensions.Logging;
 
 namespace WheyMenII.UI
 {
     public class CustomersController : Controller
     {
-        private ICustomerDAL _context;
-        public CustomersController(ICustomerDAL cDAL)
+        private readonly ICustomerDAL _context;
+        private readonly ILogger logger;
+        public CustomersController(ICustomerDAL cDAL,ILogger logger)
         {
             _context = cDAL;
+            this.logger = logger;
         }
         public IActionResult Search(string SearchFirstName, string SearchLastName)
         {
+            logger.LogInformation($"Searching for cust {1} {2}",SearchFirstName,SearchLastName)
             return View(_context.SearchCust(1, SearchFirstName, SearchLastName));
         }
 
@@ -65,6 +64,7 @@ namespace WheyMenII.UI
                 //_context.Add(customer);
                 //await _context.SaveChangesAsync();
                 _context.Add(customer);
+                logger.LogInformation($"Successfully created customer");
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);
@@ -101,6 +101,7 @@ namespace WheyMenII.UI
             if (ModelState.IsValid)
             {
                 _context.Edit(customer);
+                logger.LogInformation("Successfully edited customer").
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);
@@ -119,6 +120,8 @@ namespace WheyMenII.UI
             {
                 return NotFound();
             }
+            _context.Remove(customer.Id);
+            logger.LogInformation($"Successfully deleted customer {1}", id);
 
             return View(customer);
         }
