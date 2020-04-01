@@ -39,8 +39,10 @@ namespace WheyMenII
             services.AddLogging(logger=>
             {
                 logger.AddConfiguration(Configuration.GetSection("Logging"));
+                logger.AddAzureWebAppDiagnostics();
                 logger.AddConsole();
                 logger.AddDebug();
+                
             });
             services.AddControllersWithViews();
         }

@@ -54,6 +54,7 @@ namespace WheyMenII.UI.Controllers
         /// <returns></returns>
         private CreateOrderViewModel InitCOVM(int storeID)
         {
+            TempData["StoreID"] = storeID;
             var inventoryItemModel = new CreateOrderViewModel
             {
                 Inventory = _locContext.GetInventory(storeID)
@@ -62,16 +63,7 @@ namespace WheyMenII.UI.Controllers
             return inventoryItemModel;
         }
 
-        public IActionResult CreateOrderItem()
-        {
-            int storeID = Convert.ToInt32(TempData["StoreID"]);
-            TempData["StoreID"] = storeID;
-            
-            return View(InitCOVM(storeID));
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult CreateOrderItem([Bind("Oid","Qty","Id","Pid")] OrderItem item)
+        private bool AddOrderItem(OrderItem item)
         {
             //store storeid from previous failed order and current qty (overwritten when assigning to previous item)
             int storeID = Convert.ToInt32(TempData["StoreID"]);
@@ -87,13 +79,45 @@ namespace WheyMenII.UI.Controllers
                 item.Oid = orderID;
                 _context.AddOrderItem(item);
                 logger.LogInformation($"Adding item to {1}", item.Oid);
-                if (TempData["Continue"] != null)
-                {
-                    return View(InitCOVM(storeID));
-                }
-                return RedirectToAction(nameof(Index));
+                return true;
             }
             ModelState.AddModelError("QuantityError", "Invalid quantity entered, please try again");
+            return false;
+        }
+
+        public IActionResult AddMore([Bind("Oid", "Qty", "Id", "Pid")] OrderItem item)
+        {
+            if(!AddOrderItem(item))
+            {
+                TempData["ItemAddError"] = true;
+            }
+            int storeId = Convert.ToInt32(TempData["StoreID"]);
+            InitCOVM(storeId); 
+            return RedirectToAction("CreateOrderItem");
+        }
+
+        public IActionResult CreateOrderItem()
+        {
+            if (TempData["ItemAddError"] != null && (bool)TempData["ItemAddError"] == true)
+            {
+                ModelState.AddModelError("QuantityError","Iteam not added, invalid quantity!");
+            }
+            int storeID = Convert.ToInt32(TempData["StoreID"]);
+            TempData["StoreID"] = storeID;
+            
+            return View(InitCOVM(storeID));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateOrderItem([Bind("Oid","Qty","Id","Pid")] OrderItem item)
+        {
+            
+            if (AddOrderItem(item))
+            {
+                return RedirectToAction(nameof(Index));
+            }//else error
+            ModelState.AddModelError("QuantityError", "Invalid quantity entered, please try again");
+            int storeID = Convert.ToInt32(TempData["StoreID"]);
             return View(InitCOVM(storeID));
         }
 
@@ -147,7 +171,7 @@ namespace WheyMenII.UI.Controllers
                     };
                     TempData["OrderID"] = _context.Add(new_order);
                     TempData["StoreID"] = order.LocId;
-                    logger.LogInformation("Order successfully recreated");
+                    logger.LogInformation("Order successfully created");
                     return RedirectToAction("CreateOrderItem");
                 }
                 else
@@ -241,7 +265,6 @@ namespace WheyMenII.UI.Controllers
         public IActionResult DeleteConfirmed(int id)
         {
             var order =  _context.FindByID(id);
-            _context.Remove(order.Id);
             return RedirectToAction(nameof(Index));
         }
 
