@@ -5,16 +5,38 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WheyMen.Domain.Model
 {
+    /// <summary>
+    /// Order lines
+    /// </summary>
     public partial class OrderItem
     {
+        public int Id { get; set; }
+        /// <summary>
+        /// Order the item is associated to
+        /// </summary>
         public int Oid { get; set; }
+
+        /// <summary>
+        /// Quantity purchased
+        /// </summary>
         [Display(Name="Quantity")]
         public int Qty { get; set; }
-        public int Id { get; set; }
+
+       
+        /// <summary>
+        /// Product purchased
+        /// </summary>
         [ForeignKey("pid")]
         public int Pid { get; set; }
 
+        /// <summary>
+        /// Nav prop to order
+        /// </summary>
         public virtual Order O { get; set; }
+
+        /// <summary>
+        /// nav propr to inventory purchased from
+        /// </summary>
         public virtual Inventory P { get; set; }
 
         /// <summary>
