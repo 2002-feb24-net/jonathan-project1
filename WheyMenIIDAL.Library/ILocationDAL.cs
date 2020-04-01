@@ -15,6 +15,12 @@ namespace WheyMen.Domain
         /// <param name="qty">quantity to decrease by</param>
         void UpdateInventory(int id, int qty);
         /// <summary>
+        /// Retrieves inventory quantity of item
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        int GetQty(int id);
+        /// <summary>
         /// Retrieves inventory of a location
         /// </summary>
         /// <param name="id">location id or name</param>

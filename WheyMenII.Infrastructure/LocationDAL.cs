@@ -14,7 +14,7 @@ namespace WheyMen.Infrastructure
         private readonly WheyMenContext context = new WheyMenContext();
         public IEnumerable<Loc> GetLocs()
         {
-            return context.Loc;
+            return context.Loc.Include("P.P");
         }
 
         /// <summary>
@@ -39,6 +39,10 @@ namespace WheyMen.Infrastructure
             var to_update = context.Inventory.Find(id);
             to_update.Qty -= qty;
             context.SaveChanges();
+        }
+        public int GetQty(int id)
+        {
+            return context.Inventory.Find(id).Qty;
         }
         public List<Inventory> GetInventory(int id)
         {

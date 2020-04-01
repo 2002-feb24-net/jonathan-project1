@@ -1,25 +1,72 @@
-﻿@model WheyMen.Domain.Model.OrderItem
+﻿@model WheyMenII.UI.Models.CreateOrderViewModel
 
 @{
     ViewData["Title"] = "CreateOrderItem";
 }
 
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+</head>
 <h1>Create Order Item</h1>
 
-<h4>Order Item</h4>
+<h4>Inventory</h4>
+@if (!ViewData.ModelState.IsValid && ViewData.ModelState["QuantityError"].Errors.Count > 0)
+{
+    <div class="my-alert">
+        <strong>Error!</strong> @ViewData.ModelState["QuantityError"].Errors.First().ErrorMessage
+    </div>
+}
 <hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Inventory.First().P.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Inventory.First().Qty)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Inventory.First().P.Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Inventory)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.P.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Qty)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.P.Price)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreateOrderItem">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Pid" class="control-label">Product Name</label>
-                <select asp-for="Pid" class="form-control" asp-items="ViewBag.Pid"></select>
+                <label asp-for="@Model.Item.Pid" class="control-label">Product Name</label>
+                <select asp-for="@Model.Item.Pid" class="form-control" asp-items="ViewBag.Pid"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Qty" class="control-label"></label>
-                <input asp-for="Qty" class="form-control" />
-                <span asp-validation-for="Qty" class="text-danger"></span>
+                <label asp-for="@Model.Item.Qty" class="control-label">Quantity</label>
+                <input asp-for="@Model.Item.Qty" class="form-control" />
+                <span asp-validation-for="@Model.Item.Qty" class="text-danger"></span>
             </div>
 
             <div class="form-group">

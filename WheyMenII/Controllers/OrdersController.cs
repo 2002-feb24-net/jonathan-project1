@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using WheyMen.Infrastructure;
 using WheyMen.Domain;
 using WheyMen.Domain.Model;
+using System.Dynamic;
+using WheyMenII.UI.Models;
+using Newtonsoft.Json;
 
 namespace WheyMenII.UI.Controllers
 {
@@ -26,8 +29,6 @@ namespace WheyMenII.UI.Controllers
             _locContext = lDAL;
         }
 
-      
-
         public async Task<IActionResult> SearchLocOrders(string locName)
         {
             return View("Index", await _context.GetOrders(1, locName));
@@ -43,24 +44,44 @@ namespace WheyMenII.UI.Controllers
             return View(wheyMenContext.ToList());
         }
 
+        private CreateOrderViewModel InitCOVM(int storeID)
+        {
+            var inventoryItemModel = new CreateOrderViewModel
+            {
+                Inventory = _locContext.GetInventory(storeID)
+            };
+            ViewData["Pid"] = new SelectList(_locContext.GetInventory(storeID), "Id", "P.Name");
+            return inventoryItemModel;
+        }
+
         public IActionResult CreateOrderItem()
         {
             int storeID = Convert.ToInt32(TempData["StoreID"]);
-            ViewData["Pid"] = new SelectList(_locContext.GetInventory(storeID), "Id","P.Name");
-            return View("CreateOrderItem");
+            TempData["StoreID"] = storeID;
+            
+            return View(InitCOVM(storeID));
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CreateOrderItem([Bind("Oid","Qty","Id","Pid")] OrderItem item)
         {
-            int orderID = Convert.ToInt32(TempData["OrderID"]);
-            if(ModelState.IsValid)
+            if (ModelState.IsValid && item.ValidateQuantity( _locContext.GetQty(item.Pid)))
             {
-                item.Oid = orderID;
+                int qty = item.Qty;
+                if(TempData["Item"]!=null)
+                {
+                    item = JsonConvert.DeserializeObject<OrderItem>((string)TempData["Item"]);
+                }
+                _locContext.UpdateInventory(item.Pid, qty);
+                item.Oid = Convert.ToInt32(TempData["OrderID"]);
                 _context.AddOrderItem(item);
+                return RedirectToAction(nameof(Index));
             }
-
-            return RedirectToAction(nameof(Index));
+            ModelState.AddModelError("QuantityError", "Invalid quantity entered, please try again");
+            int storeID = Convert.ToInt32(TempData["StoreID"]);
+            TempData["StoreID"] = storeID;
+            TempData["Item"] = JsonConvert.SerializeObject(item);
+            return View(InitCOVM(storeID));
         }
 
         // GET: Orders/Details/5

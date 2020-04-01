@@ -15,9 +15,20 @@ namespace WheyMenII
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(env.ContentRootPath)
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
+
+            builder.AddEnvironmentVariables();
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -25,9 +36,9 @@ namespace WheyMenII
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IOrderDAL, OrderDAL>();
-            services.AddSingleton<ICustomerDAL, CustomerDAL>();
-            services.AddSingleton<ILocationDAL, LocationDAL>();
+            services.AddTransient<IOrderDAL, OrderDAL>();
+            services.AddTransient<ICustomerDAL, CustomerDAL>();
+            services.AddTransient<ILocationDAL, LocationDAL>();
             services.AddControllersWithViews();
         }
 
