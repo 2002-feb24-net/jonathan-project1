@@ -116,7 +116,7 @@ namespace WheyMen.Infrastructure
         //returns actual pwd of customer
         public string VerifyCustomer(string username,out int id)
         {
-            var cust = SearchCust(1,username).First();
+            var cust = context.Customer.FirstOrDefault(cust => cust.Username == username);
             if(cust==null)
             {
                 id = -1;
@@ -124,9 +124,10 @@ namespace WheyMen.Infrastructure
             else
             {
                 id = cust.Id;
+                return cust.Pwd;
             }
+            return "";
             
-            return cust.Pwd;
         }
         //returns -1 if customer name or id does not exist
         //returns the matching ID other wise

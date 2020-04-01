@@ -11,15 +11,15 @@ namespace WheyMenII.UI
     public class CustomersController : Controller
     {
         private readonly ICustomerDAL _context;
-        private readonly ILogger logger;
-        public CustomersController(ICustomerDAL cDAL,ILogger logger)
+        private readonly ILogger<CustomersController> logger;
+        public CustomersController(ICustomerDAL cDAL,ILogger<CustomersController> logger)
         {
             _context = cDAL;
             this.logger = logger;
         }
         public IActionResult Search(string SearchFirstName, string SearchLastName)
         {
-            logger.LogInformation($"Searching for cust {1} {2}",SearchFirstName,SearchLastName)
+            logger.LogInformation($"Searching for cust {1} {2}", SearchFirstName, SearchLastName);
             return View(_context.SearchCust(1, SearchFirstName, SearchLastName));
         }
 
@@ -101,7 +101,7 @@ namespace WheyMenII.UI
             if (ModelState.IsValid)
             {
                 _context.Edit(customer);
-                logger.LogInformation("Successfully edited customer").
+                logger.LogInformation("Successfully edited customer");
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);

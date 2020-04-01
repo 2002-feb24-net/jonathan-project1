@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using WheyMen.Infrastructure;
 using WheyMen.Domain;
 using Microsoft.Extensions.Logging;
+using WheyMenII.UI.Controllers;
+using WheyMenII.UI;
 
 namespace WheyMenII
 {
@@ -40,9 +42,7 @@ namespace WheyMenII
             services.AddTransient<IOrderDAL, OrderDAL>();
             services.AddTransient<ICustomerDAL, CustomerDAL>();
             services.AddTransient<ILocationDAL, LocationDAL>();
-            services.AddScoped<ILogger,ILogger<OrderDAL>>();
-            services.AddScoped<ILogger,ILogger<CustomerDAL>>();
-            services.AddScoped<ILogger,ILogger<LocationDAL>>();
+            services.AddLogging();
             services.AddControllersWithViews();
         }
 
