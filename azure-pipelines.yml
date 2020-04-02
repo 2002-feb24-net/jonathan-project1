@@ -1,21 +1,35 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+# Azure Pipelines YAML documentation
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema
 
+# this file defines a set of jobs that will run when triggered on a cloned version of your repo.
+# a job is a set of steps
+# by default, ther'es just one job, and you give it its list of steps
+
+# by default, all branches get built
+# but adding a trigger configuration like this says "only build master branch"
 trigger:
 - master
 
+# a pool is a set of machines for running this job.
+# this configuration says: "use Microsoft's hosted Ubuntu Linux virtual machines"
+# (we could, if we wanted, have it connect to a machine WE control to run the job on)
 pool:
   vmImage: 'ubuntu-latest'
 
+# the steps in the job
+# "script" is one kind of step - on linux it'll run in bash
+# on windows it'll run in command prompt
+# give all steps a good display name
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
-- script: |
-  
-    echo Add other tasks to build, test, and deploy your project.
-    ls
-    dotnet build
-  displayName: 'Show files and build'
+# - script: echo Hello, world!
+#   displayName: Print hello world
+
+# - script: |
+#     echo "Showing current directory contents"
+#     ls
+#   displayName: Show directory contents
+
+- script: dotnet build
+  # workingDirectory: 'MyProject1Folder'
+  displayName: dotnet build
