@@ -252,8 +252,7 @@ namespace WheyMenII.UI.Controllers
             {
                 return NotFound();
             }
-            _context.Remove(order.Id);
-            logger.LogInformation($"Successfully removed order {1}", id);
+            
 
             return View(order);
         }
@@ -264,6 +263,8 @@ namespace WheyMenII.UI.Controllers
         public IActionResult DeleteConfirmed(int id)
         {
             var order =  _context.FindByID(id);
+            _context.Remove(order.Id);
+            logger.LogInformation($"Successfully removed order {1}", id);
             return RedirectToAction(nameof(Index));
         }
 

@@ -37,7 +37,8 @@ namespace WheyMen.Infrastructure
         {
             try
             {
-                var toRemove = context.Order.Find(id);
+                var toRemove = context.Order.Include(x=>x.OrderItem).FirstOrDefault(x=>x.Id==id);
+                context.OrderItem.RemoveRange(toRemove.OrderItem);
                 context.Remove(toRemove);
                 context.SaveChanges();
             }
