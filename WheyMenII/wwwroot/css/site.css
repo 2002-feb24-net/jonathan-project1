@@ -63,7 +63,7 @@ html {
 }
 
 /*  Coloring */
-h1,h2,h3,h4,h5,h6,td,th,.nav-item,.navbar-brand,p,dt, label {
+h1,h2,h3,h4,h5,h6,td,th,.nav-item,.navbar-brand,p,dt, label, col-sm-10,dd {
     color: white;
 }
 body, header, nav {

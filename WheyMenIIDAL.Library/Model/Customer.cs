@@ -16,9 +16,9 @@ namespace WheyMen.Domain.Model
         /// <summary>
         /// Customer ID
         /// </summary>
-        [Key]
         [Display(Name="Customer ID")]
-        public int Id { get;}
+        [Key]
+        public int Id { get; set; }
 
         /// <summary>
         /// Customer's first name

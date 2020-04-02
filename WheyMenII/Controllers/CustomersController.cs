@@ -49,6 +49,10 @@ namespace WheyMenII.UI
         // GET: Customers/Create
         public IActionResult Create()
         {
+            if(TempData["CustAddError"]!=null && (bool)TempData["CustAddError"]==true)
+            {
+                ModelState.AddModelError("CustAddError", "Creating the customer failed change username/email.");
+            }
             return View();
         }
 
@@ -61,7 +65,15 @@ namespace WheyMenII.UI
         {
             if (ModelState.IsValid)
             {
-                _context.Add(customer);
+                try
+                {
+                    _context.Add(customer);
+                }
+                catch (Exception)
+                {
+                    TempData["CustAddError"] = true;
+                    return View(customer);
+                }
                 logger.LogInformation($"Successfully created customer");
                 return RedirectToAction(nameof(Index));
             }
@@ -71,10 +83,6 @@ namespace WheyMenII.UI
         // GET: Customers/Edit/5
         public IActionResult Edit(int? id)
         {
-            if(TempData["EditFailed"]!=null && (bool)TempData["EditFailed"] == true)
-            {
-                ModelState.AddModelError("EditFailed", "Updating the customer failed please try again later.");
-            }
             if (id == null)
             {
                 return NotFound();
@@ -95,6 +103,7 @@ namespace WheyMenII.UI
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("Id,Name,Email,Username,Pwd,LastName")] Customer customer)
         {
+           
             if (_context.FindByID(id).Username != customer.Username) //username cant be updated
             {
                 return NotFound();
@@ -106,11 +115,12 @@ namespace WheyMenII.UI
                 {
                     _context.Edit(customer);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     logger.LogError("Customer edit failed");
                     TempData["EditFailed"] = true;
-                    return View();
+                    ModelState.AddModelError("EditFailed", "Updating the customer failed please try again later.");
+                    return View(customer);
                 }
                 logger.LogInformation("Successfully edited customer");
                 return RedirectToAction(nameof(Index));
@@ -131,8 +141,7 @@ namespace WheyMenII.UI
             {
                 return NotFound();
             }
-            _context.Remove(customer.Id);
-            logger.LogInformation($"Successfully deleted customer {1}", id);
+           
 
             return View(customer);
         }
@@ -142,7 +151,8 @@ namespace WheyMenII.UI
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-             _context.Remove(id);
+            logger.LogInformation($"Successfully deleted customer {1}", id);
+            _context.Remove(id);
             return RedirectToAction(nameof(Index));
         }
 

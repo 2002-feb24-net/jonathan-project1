@@ -44,6 +44,9 @@ namespace WheyMen.Infrastructure
         /// <param name="cust"></param>
         public void Edit(Customer cust)
         {
+            var old = FindByID(cust.Id);
+            context.Entry(old).State = EntityState.Detached;
+            context.Set<Customer>().Attach(cust);
             context.Entry(cust).State = EntityState.Modified;
             context.SaveChanges();
         }

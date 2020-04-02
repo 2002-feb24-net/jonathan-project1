@@ -33,9 +33,9 @@ namespace WheyMenII
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IOrderDAL, OrderDAL>();
-            services.AddTransient<ICustomerDAL, CustomerDAL>();
-            services.AddTransient<ILocationDAL, LocationDAL>();
+            services.AddScoped<IOrderDAL, OrderDAL>();
+            services.AddScoped<ICustomerDAL, CustomerDAL>();
+            services.AddScoped<ILocationDAL, LocationDAL>();
             services.AddLogging(logger=>
             {
                 logger.AddConfiguration(Configuration.GetSection("Logging"));

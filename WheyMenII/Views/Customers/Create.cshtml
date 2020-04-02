@@ -7,6 +7,12 @@
 <h1>Create</h1>
 
 <h4>Customer</h4>
+@if (!ViewData.ModelState.IsValid && ViewData.ModelState["CustAddError"].Errors.Count > 0)
+{
+    <div class="my-alert">
+        <strong>Error!</strong> @ViewData.ModelState["CustAddError"].Errors.First().ErrorMessage
+    </div>
+}
 <hr />
 <div class="row">
     <div class="col-md-4">
