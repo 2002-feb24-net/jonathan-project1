@@ -29,9 +29,11 @@ namespace WheyMen.Infrastructure
         {
             var config = new ConfigurationBuilder()
                                   .SetBasePath(Directory.GetCurrentDirectory())
-                                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                                  .Build();
-            string conn = config.GetConnectionString("Default");
+                                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                                  
+            config.AddUserSecrets<WheyMenContext>();
+            var Configuration = config.Build();
+            string conn = Configuration["ConnectionStrings:Default"];
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(conn);
