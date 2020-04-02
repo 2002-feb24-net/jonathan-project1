@@ -15,14 +15,22 @@ namespace WheyMen.Infrastructure
     {
         readonly WheyMenContext context = new WheyMenContext();
         
+        public void RemoveOrderItem(OrderItem item)
+        {
+            context.OrderItem.Remove(item);
+            context.SaveChanges();
+        }
+
         public Order FindByID(int id)
         {
-            return context.Order
+            var res = context.Order
                     .Include(o => o.Cust)
                     .Include(o => o.Loc)
                     .Include("OrderItem.P")
                     .Include("OrderItem.P.P")
                     .FirstOrDefault(m=>m.Id==id);
+            context.Entry(res).Reload();
+            return res;
         }
 
         public void Remove(int id)

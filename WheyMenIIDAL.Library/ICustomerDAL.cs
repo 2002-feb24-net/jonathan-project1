@@ -30,7 +30,7 @@ namespace WheyMen.Domain
         /// Adds a customer to database
         /// </summary>
         /// <param name="cust"></param>
-        public void Add(Customer cust);
+        public int Add(Customer cust);
 
         /// <summary>
         /// Sets customer's state to edited

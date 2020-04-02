@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 
 namespace WheyMen.Domain.Model
 {
@@ -47,7 +48,8 @@ namespace WheyMen.Domain.Model
         /// <returns></returns>
         public bool ValidateQuantity( int qty)
         {
-            return this.Qty < qty * .5 || (this.Qty < 100 && this.Qty < qty);
+            Debug.WriteLine(this.Qty>0);
+            return this.Qty >0 && (this.Qty < qty * .5 || (this.Qty < 100 && this.Qty < qty));
         }
     }
 }

@@ -30,11 +30,12 @@ namespace WheyMen.Infrastructure
         /// Adds a customer to database
         /// </summary>
         /// <param name="cust"></param>
-        public void Add(Customer cust)
+        public int Add(Customer cust)
         {
             context.Customer.Add(cust);
             context.SaveChanges();
-
+            context.Entry(cust).Reload();
+            return cust.Id;
         }
 
         /// <summary>
@@ -44,6 +45,7 @@ namespace WheyMen.Infrastructure
         public void Edit(Customer cust)
         {
             context.Entry(cust).State = EntityState.Modified;
+            context.SaveChanges();
         }
 
         public int NumberOfCustomers()

@@ -31,7 +31,7 @@ a {
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 @media (min-width: 768px) {
   html {
@@ -62,7 +62,17 @@ html {
   min-height: 100%;
 }
 
-body {
+/*  Coloring */
+h1,h2,h3,h4,h5,h6,td,th,.nav-item,.navbar-brand,p,dt, label {
+    color: white;
+}
+body, header, nav {
+    background: #0f0c29; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #24243e, #302b63, #0f0c29); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #24243e, #302b63, #0f0c29); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+body,header {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
     font-family: 'Permanent Marker', cursive !important;

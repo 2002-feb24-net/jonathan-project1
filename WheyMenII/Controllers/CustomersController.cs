@@ -71,6 +71,10 @@ namespace WheyMenII.UI
         // GET: Customers/Edit/5
         public IActionResult Edit(int? id)
         {
+            if(TempData["EditFailed"]!=null && (bool)TempData["EditFailed"] == true)
+            {
+                ModelState.AddModelError("EditFailed", "Updating the customer failed please try again later.");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -91,14 +95,23 @@ namespace WheyMenII.UI
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("Id,Name,Email,Username,Pwd,LastName")] Customer customer)
         {
-            if (id != customer.Id)
+            if (_context.FindByID(id).Username != customer.Username) //username cant be updated
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                _context.Edit(customer);
+                try
+                {
+                    _context.Edit(customer);
+                }
+                catch (Exception)
+                {
+                    logger.LogError("Customer edit failed");
+                    TempData["EditFailed"] = true;
+                    return View();
+                }
                 logger.LogInformation("Successfully edited customer");
                 return RedirectToAction(nameof(Index));
             }
