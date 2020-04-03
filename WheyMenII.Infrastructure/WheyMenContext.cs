@@ -27,13 +27,22 @@ namespace WheyMen.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
             var config = new ConfigurationBuilder()
                                   .SetBasePath(Directory.GetCurrentDirectory())
-                                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-                                  
-            config.AddUserSecrets<WheyMenContext>();
-            var Configuration = config.Build();
-            string conn = Configuration["ConnectionStrings:Default"];
+                                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                                  .Build();
+            string conn = config.GetConnectionString("Default");
+            if (conn == null)
+            {
+                var config1 = new ConfigurationBuilder()
+                                      .SetBasePath(Directory.GetCurrentDirectory())
+                                      .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+                config1.AddUserSecrets<WheyMenContext>();
+                var Configuration = config1.Build();
+                conn = Configuration["ConnectionStrings:Default"];
+            }
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(conn);
