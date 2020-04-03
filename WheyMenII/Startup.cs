@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using WheyMen.Infrastructure;
 using WheyMen.Domain;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace WheyMenII
 {
@@ -33,7 +34,7 @@ namespace WheyMenII
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            WheyMenContext.conn = Configuration.GetConnectionString("Default");
+            services.AddDbContext<WheyMenContext>(x => x.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.AddScoped<IOrderDAL, OrderDAL>();
             services.AddScoped<ICustomerDAL, CustomerDAL>();
             services.AddScoped<ILocationDAL, LocationDAL>();

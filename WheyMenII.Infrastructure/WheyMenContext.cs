@@ -9,7 +9,6 @@ namespace WheyMen.Infrastructure
 {
     public partial class WheyMenContext : DbContext
     {
-        public static string conn;
         public WheyMenContext()
         {
             
@@ -27,13 +26,7 @@ namespace WheyMen.Infrastructure
         public virtual DbSet<OrderItem> OrderItem { get; set; }
         public virtual DbSet<Products> Products { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer(conn);
-            }
-        }
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
