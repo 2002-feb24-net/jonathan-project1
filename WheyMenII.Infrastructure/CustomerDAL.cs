@@ -12,6 +12,11 @@ namespace WheyMen.Infrastructure
     {
         readonly WheyMenContext context;
         
+        public CustomerDAL(WheyMenContext context)
+        {
+            this.context = context;
+        }
+
         public CustomerDAL()
         {
             context = new WheyMenContext();
