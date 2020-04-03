@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
 using WheyMen.Domain.Model;
 
 namespace WheyMen.Infrastructure
@@ -181,6 +177,9 @@ namespace WheyMen.Infrastructure
                 entity.Property(e => e.Price)
                     .HasColumnName("price")
                     .HasColumnType("money");
+                entity.Property(e => e.ImgURL)
+                    .HasColumnName("imgurl")
+                    .HasMaxLength(300);
             });
 
             OnModelCreatingPartial(modelBuilder);

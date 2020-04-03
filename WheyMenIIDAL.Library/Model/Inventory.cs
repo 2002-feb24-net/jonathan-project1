@@ -47,6 +47,7 @@ namespace WheyMen.Domain.Model
         /// <summary>
         /// order items which refer to this inventory item
         /// </summary>
-        public virtual ICollection<OrderItem> OrderItem { get; set; }
+        public virtual ICollection<OrderItem> OrderItem { get; set; } 
+        
     }
 }

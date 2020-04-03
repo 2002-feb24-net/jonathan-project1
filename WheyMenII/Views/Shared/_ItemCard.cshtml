@@ -1,0 +1,46 @@
+﻿@model WheyMen.Domain.Model.Inventory
+<head>
+    <style>
+        dt {
+            margin-right: 1vw;
+        }
+        .item-card {
+            background-color: black;
+            border-radius: 1vw;
+            padding: 2vw;
+            margin: 3vw;
+        }
+        .row {
+            display: flex;
+            flex-direction: column;
+        }
+        .display {
+            display: flex;
+            flex-direction: row;
+        }
+
+    </style>
+</head>
+<div class="item-card">
+    <img src="~/Assets/Images/@Model.P.ImgURL" alt="Image not found" onerror="this.onerror=null;this.src='https://pngimage.net/wp-content/uploads/2018/06/supplements-png-5.png';" width="200" height="200" style="background:transparent"/>
+    <dl class="row">
+        <div class="display qty">
+            <dt>
+                @Html.DisplayNameFor(model => model.Qty)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Qty)
+            </dd>
+        </div>
+        <div class="display name">
+            <dt>
+                @Html.DisplayNameFor(model => model.P.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.P.Name)
+            </dd>
+        </div>
+        
+    </dl>
+</div>
+

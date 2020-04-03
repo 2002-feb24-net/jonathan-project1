@@ -33,20 +33,25 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Inventory)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.P.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Qty)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.P.Price)
-                </td>
-            </tr>
-        }
+        <div id="item-card-container" style="display:flex;justify-content:space-around;max-width:80vw;flex-wrap:wrap">
+            @foreach (var item in Model.Inventory)
+            {
+                Html.RenderPartial("_ItemCard", item);
+                /*
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.P.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Qty)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.P.Price)
+                    </td>
+                </tr>
+                */
+            }
+        </div>
     </tbody>
 </table>
 

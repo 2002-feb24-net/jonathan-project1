@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace WheyMen.Domain.Model
@@ -34,5 +33,10 @@ namespace WheyMen.Domain.Model
         /// Stores this item can be found at
         /// </summary>
         public virtual ICollection<Inventory> Inventory { get; set; }
+
+        /// <summary>
+        /// url of img to display in inventory cards
+        /// </summary>
+        public string ImgURL { get; set; }
     }
 }
