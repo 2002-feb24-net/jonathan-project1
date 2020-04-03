@@ -106,7 +106,7 @@ namespace WheyMenII.Test
             }
         }
         [TestMethod]
-        public async Task TestOrdEdit()
+        public void TestOrdEdit()
         {
             OrderDAL Repo;
             LocationDAL LocDal;
@@ -242,7 +242,7 @@ namespace WheyMenII.Test
             }
         }
         [TestMethod]
-        public async Task TestOrdTotalUpdate()
+        public void TestOrdTotalUpdate()
         {
             OrderDAL Repo;
             LocationDAL LocDal;
@@ -291,7 +291,7 @@ namespace WheyMenII.Test
         [DataTestMethod]
         [DataRow(0)]
         [DataRow(100000000)]
-        public async Task TestInvalidQty(int qty)
+        public void TestInvalidQty(int qty)
         {
             OrderDAL Repo;
             LocationDAL LocDal;
@@ -329,7 +329,7 @@ namespace WheyMenII.Test
         [DataTestMethod]
         [DataRow(1)]
         [DataRow(3)]
-        public async Task TestValidQty(int qty)
+        public void TestValidQty(int qty)
         {
             OrderDAL Repo;
             LocationDAL LocDal;

@@ -59,8 +59,7 @@ namespace WheyMen.Infrastructure
 
         public List<Inventory> GetInventory(int id)
         {
-            var listInventoryModel = new List<Inventory>();
-            listInventoryModel = context.Inventory
+            var listInventoryModel = context.Inventory
                                             .Include("P")
                                             .Where(i => i.StoreId == id)
                                             .ToList();

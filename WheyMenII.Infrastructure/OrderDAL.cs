@@ -102,25 +102,22 @@ namespace WheyMen.Infrastructure
         public async Task<List<Order>> GetOrders(int mode=0, params string[] search_param)
         {
             var orderList = context.Order.Include("Loc").Include("Cust").AsQueryable();
-            using(var context = new WheyMenContext())
+            switch (mode)
             {
-                switch (mode)
-                {
-                    case 1:
-                        orderList = orderList
-                        .Where(o => o.Loc.Name == search_param[0]);
-                        break;
-                    case 2:
-                        orderList = orderList
-                        .Where(o => o.Cust.Name == search_param[0] && o.Cust.LastName == search_param[1] );
-                        break;
-                    case 3:
-                        orderList = orderList
-                        .Where(o => o.Id == Convert.ToInt32(search_param[0]));
-                        break;
-                    default:
-                        break;
-                }
+                case 1:
+                    orderList = orderList
+                    .Where(o => o.Loc.Name == search_param[0]);
+                    break;
+                case 2:
+                    orderList = orderList
+                    .Where(o => o.Cust.Name == search_param[0] && o.Cust.LastName == search_param[1] );
+                    break;
+                case 3:
+                    orderList = orderList
+                    .Where(o => o.Id == Convert.ToInt32(search_param[0]));
+                    break;
+                default:
+                    break;
             }
             return await orderList
                         .Include("OrderItem")

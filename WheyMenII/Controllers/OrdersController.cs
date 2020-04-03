@@ -175,7 +175,7 @@ namespace WheyMenII.UI.Controllers
         }
 
         // GET: Orders/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             if(TempData["VerificationError"]!=null && (bool)TempData["VerificationError"]==true)
             {

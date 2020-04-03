@@ -115,7 +115,7 @@ namespace WheyMenII.UI
                 {
                     _context.Edit(customer);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     logger.LogError("Customer edit failed");
                     TempData["EditFailed"] = true;
@@ -156,9 +156,5 @@ namespace WheyMenII.UI
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CustomerExists(int id)
-        {
-            return !(_context.FindByID(id)==null);
-        }
     }
 }
