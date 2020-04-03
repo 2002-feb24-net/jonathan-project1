@@ -34,16 +34,19 @@ namespace WheyMen.Infrastructure
         {
             context.Entry(l).State = EntityState.Modified;
         }
+
         public void UpdateInventory(int id, int qty)
         {
             var to_update = context.Inventory.Find(id);
             to_update.Qty -= qty;
             context.SaveChanges();
         }
+
         public int GetQty(int id)
         {
             return context.Inventory.Find(id).Qty;
         }
+
         public List<Inventory> GetInventory(int id)
         {
             var listInventoryModel = new List<Inventory>();
@@ -53,11 +56,6 @@ namespace WheyMen.Infrastructure
                                             .ToList();
 
             return listInventoryModel;
-        }
-
-        public List<Loc> GetList()
-        {
-            return context.Loc.ToList();
         }
     }
 }

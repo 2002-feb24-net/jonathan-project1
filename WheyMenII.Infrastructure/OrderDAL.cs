@@ -2,8 +2,6 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Globalization;
-using Microsoft.Extensions.Configuration;
 
 using WheyMen.Domain;
 using WheyMen.Domain.Model;
@@ -85,34 +83,6 @@ namespace WheyMen.Infrastructure
         {
             context.OrderItem.Add(item);
             context.SaveChanges();
-        }
-
-        public async Task<int> ValidateOrder(int id)
-        {
-            var ordList = await GetOrders();
-            foreach(var order in ordList)
-            {
-                if(id>0&&order.Id == id)
-                {
-                    return id;
-                }
-                
-            }
-            return -1;
-        }
-
-        public int CreateOrder(int cid, int lid)
-        {
-            var new_order = new Order
-            {
-                CustId = cid,
-                LocId = lid,
-                Total = 0,
-                Timestamp = DateTime.Now,
-            };
-            context.Order.Add(new_order);
-            context.SaveChanges();
-            return new_order.Id;
         }
 
         //Searches orders by given param, param is checked against Order columns according to mode

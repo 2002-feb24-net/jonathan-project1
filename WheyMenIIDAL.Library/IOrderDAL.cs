@@ -42,19 +42,6 @@ namespace WheyMen.Domain
         public void Edit(Order ord);
 
         /// <summary>
-        /// Calls getorders, list of orders searched for given id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>-1 if order does not exist, order id otherwise</returns>
-        Task<int> ValidateOrder(int id);
-        /// <summary>
-        /// Runs sp_create_ord and assisgns cid, lid params
-        /// </summary>
-        /// <param name="cid"> customer id</param>
-        /// <param name="lid"> location id</param>
-        /// <returns>id of created order</returns>
-        int CreateOrder(int cid, int lid);
-        /// <summary>
         /// Adds order item to database 
         /// </summary>
         /// <param name="oid">order id</param>

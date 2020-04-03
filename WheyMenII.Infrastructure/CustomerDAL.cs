@@ -11,6 +11,7 @@ namespace WheyMen.Infrastructure
     public class CustomerDAL : ICustomerDAL
     {
         readonly WheyMenContext context = new WheyMenContext();
+
         public void Remove(int id)
         {
             var toRemove = context.Customer.Find(id);
@@ -18,14 +19,17 @@ namespace WheyMen.Infrastructure
             context.SaveChanges();
           
         }
+        
         public Customer FindByID(int id)
         {
             return context.Customer.Find(id);
         }
+        
         public async Task<IEnumerable<Customer>> GetCusts()
         {
             return await context.Customer.ToListAsync();
         }
+        
         /// <summary>
         /// Adds a customer to database
         /// </summary>
@@ -49,51 +53,6 @@ namespace WheyMen.Infrastructure
             context.Set<Customer>().Attach(cust);
             context.Entry(cust).State = EntityState.Modified;
             context.SaveChanges();
-        }
-
-        public int NumberOfCustomers()
-        {
-            return context.Customer.ToList().Count;
-
-        }
-        public bool CheckUnique(int mode, string check)
-        {
-            if (mode == 1)
-            {
-                if (context.Customer.Where(c => c.Username==check).ToList().Count==0)
-                {
-                    return true;
-                }
-            }
-            else if (mode == 2)
-            {
-                if(context.Customer.Where(c=>c.Email == check).ToList().Count==0)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        public int AddCust(string fn, string ln, string username, string email, string pwd)
-        {
-            var new_cust = new Customer
-            {
-                Name = fn,
-                Email = email,
-                Username = username,
-                Pwd = pwd,
-                LastName = ln
-            };
-            try
-            {
-                context.Customer.Add(new_cust);
-                context.SaveChanges();
-            }
-            catch(DbUpdateException)
-            {
-                Console.WriteLine("Email/username already exists");
-            }
-            return new_cust.Id;
         }
 
         //Searches customers by either name or username
@@ -133,30 +92,6 @@ namespace WheyMen.Infrastructure
             }
             return "";
             
-        }
-        //returns -1 if customer name or id does not exist
-        //returns the matching ID other wise
-        public int ValidateCustomer(int id = -1, params string[] name)
-        {
-            var listCustomers = GetList();
-            foreach (var cust in listCustomers)
-            {
-                if (id > 0 && cust.Id == id)
-                {
-                    return id;
-                }
-                else if (id<0 && cust.Name == name[0] && cust.LastName == name[1])
-                {
-                    return cust.Id;
-                }
-            }
-            return -1;
-        }
-
-        public List<Customer> GetList()
-        {
-            var listCustomerModel = context.Customer.ToList();
-            return listCustomerModel;
         }
     }
 }
