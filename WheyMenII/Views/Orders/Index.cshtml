@@ -3,14 +3,29 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/OrderStlye.css"/>
+</head>
 <h1>Orders</h1>
 <div id="function-continer">
     <div id="function-buttons">
-        <button id="search-cust-orders">Search Customer Orders</button>
-        <button id="search-loc-orders">Search Location Orders</button>
-        <a asp-action="Create" class="button">Create an Order</a>
-
+        <div id="function-buttons-center">
+            <button id="search-cust-orders">Search Customer Orders</button>
+            <button id="search-loc-orders">Search Location Orders</button>
+            <a asp-action="Create" class="button">Create an Order</a>
+            @using (Html.BeginForm("SortOrders"))
+            {
+                <div class="form-group">
+                    <select class="form-control" name="SortOption">
+                        <option value="Earliest">Earliest</option>
+                        <option value="Latest">Latest</option>
+                        <option value="Most Expensive">Most Expensive</option>
+                        <option value="Least Expensive">Least Expensive</option>
+                    </select>
+                    <input asp-action="SortOrders" name="SortOption" class="sort-orders" type="submit" value="Sort" id="sort-btn"/>
+                </div>
+            }
+        </div>
     </div>
     <div id="function-inputs">
         @using (Html.BeginForm("SearchLocOrders"))
@@ -25,19 +40,7 @@
             <input type="text" class="search-cust" style="display:none;" name="lastName" placeholder="Last Name" />
             <input asp-action="SearchCustOrders" class="search-cust" type="submit" value="Search" style="display:none;" id="search-cust-begin" />
         }
-        @using (Html.BeginForm("SortOrders"))
-        {
-            <div class="form-group">
-                <label class="control-label">Location Name</label>
-                <select class="form-control" name="SortOption">
-                    <option value="Earliest">Earliest</option>
-                    <option value="Latest">Latest</option>
-                    <option value="Most Expensive">Most Expensive</option>
-                    <option value="Least Expensive">Least Expensive</option>
-                </select>
-                <input asp-action="SortOrders" name="SortOption" class="sort-orders" type="submit" value="Sort"/>
-            </div>
-        }
+        
 
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         @section scripts{

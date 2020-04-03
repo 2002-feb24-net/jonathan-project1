@@ -1,0 +1,30 @@
+﻿#function-buttons {
+    width:100%;
+    display: flex;
+    justify-content: center;
+}
+
+#function-buttons-center, #function-buttons-center .form-group, #function-inputs {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 1vh;
+}
+
+#function-buttons-center .form-group {
+    margin-left: 2vw;
+}
+
+#sort-btn {
+    margin-left: 1vw;
+}
+
+button,input[type=submit] {
+    height: 2.5em;
+    margin-right: 2vw;
+    border-radius: 10vw;
+}
+
+input[type=text] {
+    border-radius: 10vw;
+}
