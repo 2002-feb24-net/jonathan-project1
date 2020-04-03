@@ -65,7 +65,7 @@ namespace WheyMenII.Test
             int initialCount = custs.ToList().Count;
             var newCust = new Order
             {
-                CustId = 3,
+                CustId = 76,
                 Total = 0,
                 LocId = 1,
                 Timestamp = DateTime.Now
@@ -110,7 +110,7 @@ namespace WheyMenII.Test
         {
             var newCust = new Order
             {
-                CustId = 3,
+                CustId = 76,
                 Total = 0,
                 LocId = 1,
                 Timestamp = DateTime.Now
@@ -127,7 +127,6 @@ namespace WheyMenII.Test
             Assert.AreEqual(24,order.Total);
             Repo.RemoveOrderItem(orderItem);
             Repo.Remove(addedID);
-
         }
         [DataTestMethod]
         [DataRow(0)]
