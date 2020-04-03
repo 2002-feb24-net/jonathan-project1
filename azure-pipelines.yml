@@ -1,69 +1,133 @@
- # Azure Pipelines YAML documentation
-
-# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema
-
-# this file defines a set of jobs that will run when triggered on a cloned version of your repo.
-# a job is a set of steps
-# by default, ther'es just one job, and you give it its list of steps
-
-# by default, all branches get built
 trigger:
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - README.md
+
+pr:
 - master
 
-# a pool is a set of machines for running this job.
-# this configuration says: "use Microsoft's hosted Ubuntu Linux virtual machines"
-# (we could, if we wanted, have it connect to a machine WE control to run the job on)
-pool:
-  vmImage: 'ubuntu-latest'
+stages:
 
-# the steps in the job
-# "script" is one kind of step - on linux it'll run in bash
-# on windows it'll run in command prompt
-# give all steps a good display name
-steps:
+- stage: build
+  displayName: build
 
-# - script: echo Hello, world!
-#   displayName: Print hello world
+  variables:
+    sdkVersion: 3.1.x
+    solutionPath: .
+    buildConfiguration: Release
 
-# - script: |
-#     echo "Showing current directory contents"
-#     ls
-#   displayName: Show directory contents
+  jobs:
 
-- script: dotnet build
-  # workingDirectory: 'MyProject1Folder'
-  displayName: dotnet build
+  - job: build
+    displayName: build
 
-- script: dotnet test --logger trx
-  displayName: dotnet test
+    pool:
+      vmImage: ubuntu-latest
 
-- task: PublishTestResults@2
-  condition: succeededOrFailed()
-  inputs: 
-    testRunneR: VSTest
-    testResultsFiles: '**/*.trx'
-  displayName: Publish test results to build
+    steps:
 
-- task: SonarCloudPrepare@1
-  inputs:
-    SonarCloud: sonarcloud-jhbui1
-    organization: 2002-feb24-net
-    scannerMode: MSBuild
-    projectKey: 2002-feb24-net_jonathan-project1
-    projectName: WheyMen
-- task: SonarCloudPublish@1
-  displayName: publish sonarcloud
+    - task: UseDotNet@2
+      inputs:
+        packageType: sdk
+        version: $(sdkVersion)
+      displayName: dotnet $(sdkVersion)
 
-- task: DotNetCoreCLI@2
-  inputs: 
-    command: 'publish'
-    publishWebProjects: true
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: publish
+        publishWebProjects: true
+        arguments:
+          --configuration $(buildConfiguration)
+          --output $(Build.ArtifactStagingDirectory)/publish
+        modifyOutputPath: false
+        zipAfterPublish: false
+      displayName: dotnet publish
 
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Azure subscription 1(0331d11f-08e8-4a46-91f1-7c02b4a66c26)'
-    appType: 'webApp'
-    WebAppName: 'WheyMen-Jonathan-P1'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    - publish: $(Build.ArtifactStagingDirectory)/publish
+      artifact: app
+      displayName: artifact publish app
 
+  - job: test
+    displayName: test
+
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'sonarcloud-jhbui1'
+        organization: '2002-feb24-net'
+        scannerMode: 'MSBuild'
+        projectKey: '2002-feb24-net_jonathan-project1'
+        projectName: 'WheyMen'
+    
+
+    - script: dotnet build $(solutionPath)
+        --configuration $(buildConfiguration)
+      displayName: dotnet build
+
+    - script: dotnet test $(solutionPath)
+        --configuration $(buildConfiguration)
+        --collect "XPlat Code Coverage"
+        --logger trx
+        --no-build
+        --results-directory $(Common.TestResultsDirectory)
+      continueOnError: true
+      displayName: dotnet test
+
+    - task: SonarCloudAnalyze@1
+      displayName: sonarcloud analysis run
+
+    - task: PublishTestResults@2
+      condition: succeededOrFailed()
+      inputs:
+        testRunner: VSTest
+        testResultsFiles: $(Common.TestResultsDirectory)/*.trx
+      displayName: test results build publish
+
+    - task: PublishCodeCoverageResults@1
+      condition: succeededOrFailed()
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: $(Common.TestResultsDirectory)/*/coverage.cobertura.xml
+      displayName: code coverage build publish
+    
+    - task: SonarCloudPublish@1
+      condition: succeededOrFailed()
+      displayName: sonarcloud results build publish
+
+- stage: deploy
+  displayName: deploy
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  dependsOn: build
+
+  jobs:
+
+  - deployment: deploy_dev
+    displayName: deploy dev
+
+    pool:
+      vmImage: ubuntu-latest
+
+    environment: dev
+
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+
+          - download: current
+            artifact: app
+            displayName: artifact download app
+
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Azure subscription 1(1)(0331d11f-08e8-4a46-91f1-7c02b4a66c26)'
+              appType: 'webApp'
+              WebAppName: 'WheyMen-Jonathan-P1'
+              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
