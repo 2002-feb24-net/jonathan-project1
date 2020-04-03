@@ -11,7 +11,12 @@ namespace WheyMen.Infrastructure
 {
     public class OrderDAL : IOrderDAL
     {
-        readonly WheyMenContext context = new WheyMenContext();
+        readonly WheyMenContext context;
+
+        public OrderDAL()
+        {
+            context = new WheyMenContext();
+        }
         
         public void RemoveOrderItem(OrderItem item)
         {

@@ -11,7 +11,13 @@ namespace WheyMen.Infrastructure
 {
     public class LocationDAL : ILocationDAL
     {
-        private readonly WheyMenContext context = new WheyMenContext();
+        private readonly WheyMenContext context;
+
+        public LocationDAL()
+        {
+            context = new WheyMenContext();
+        }
+
         public IEnumerable<Loc> GetLocs()
         {
             return context.Loc.Include("P.P");

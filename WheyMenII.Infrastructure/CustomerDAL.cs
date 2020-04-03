@@ -10,7 +10,12 @@ namespace WheyMen.Infrastructure
 {
     public class CustomerDAL : ICustomerDAL
     {
-        readonly WheyMenContext context = new WheyMenContext();
+        readonly WheyMenContext context;
+        
+        public CustomerDAL()
+        {
+            context = new WheyMenContext();
+        }
 
         public void Remove(int id)
         {

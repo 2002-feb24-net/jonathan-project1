@@ -9,8 +9,10 @@ namespace WheyMen.Infrastructure
 {
     public partial class WheyMenContext : DbContext
     {
+        public static string conn;
         public WheyMenContext()
         {
+            
         }
 
         public WheyMenContext(DbContextOptions<WheyMenContext> options)
@@ -28,21 +30,6 @@ namespace WheyMen.Infrastructure
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
-            var config = new ConfigurationBuilder()
-                                  .SetBasePath(Directory.GetCurrentDirectory())
-                                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                                  .Build();
-            string conn = config.GetConnectionString("Default");
-            if (conn == null)
-            {
-                var config1 = new ConfigurationBuilder()
-                                      .SetBasePath(Directory.GetCurrentDirectory())
-                                      .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-                config1.AddUserSecrets<WheyMenContext>();
-                var Configuration = config1.Build();
-                conn = Configuration["ConnectionStrings:Default"];
-            }
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(conn);
