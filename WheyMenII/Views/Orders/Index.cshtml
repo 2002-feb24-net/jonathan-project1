@@ -23,7 +23,20 @@
         {
             <input type="text" class="search-cust" style="display:none;" name="firstName" placeholder="First Name" />
             <input type="text" class="search-cust" style="display:none;" name="lastName" placeholder="Last Name" />
-            <input asp-action="SearchCustOrders" class="search-cust" search-loc" type="submit" value="Search" style="display:none;" id="search-cust-begin" />
+            <input asp-action="SearchCustOrders" class="search-cust" type="submit" value="Search" style="display:none;" id="search-cust-begin" />
+        }
+        @using (Html.BeginForm("SortOrders"))
+        {
+            <div class="form-group">
+                <label class="control-label">Location Name</label>
+                <select class="form-control" name="SortOption">
+                    <option value="Earliest">Earliest</option>
+                    <option value="Latest">Latest</option>
+                    <option value="Most Expensive">Most Expensive</option>
+                    <option value="Least Expensive">Least Expensive</option>
+                </select>
+                <input asp-action="SortOrders" name="SortOption" class="sort-orders" type="submit" value="Sort"/>
+            </div>
         }
 
         <script src="~/lib/jquery/dist/jquery.min.js"></script>

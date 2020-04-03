@@ -31,19 +31,58 @@ namespace WheyMenII.UI.Controllers
 
         public async Task<IActionResult> SearchLocOrders(string locName)
         {
+            TempData["LocOrds"] = locName;
             logger.LogInformation($"Finding orders for location: {1}", locName);
             return View("Index", await _context.GetOrders(1, locName));
         }
         public async Task<IActionResult> SearchCustOrders(string firstName, string lastName)
         {
+            TempData["CustOrdsFN"] = firstName;
+            TempData["CustOrdsLN"] = lastName;
             logger.LogInformation($"Finding orders for customer: {1} {2}", firstName, lastName);
-            return View("Index", await _context.GetOrders(2,firstName,lastName));
+            var ords = await _context.GetOrders(2, firstName, lastName);
+            return View("Index", ords);
         }
         // GET: Orders
         public async Task<IActionResult> Index()
         {
             var wheyMenContext = await _context.GetOrds();
             return View(wheyMenContext.ToList());
+        }
+        public async Task<IActionResult> SortOrders(string SortOption)
+        {
+            List<Order> ords = null;
+            if (TempData["LocOrds"] != null)
+            {
+                ords = await _context.GetOrders(1, (string)TempData["LocOrds"]);
+            }
+            else if (TempData["CustOrds"]!=null)
+            {
+                var fn = (string)TempData["CustOrdsFN"];
+                var ln = (string)TempData["CustOrdsLN"];
+                ords = await _context.GetOrders(2,fn,ln);
+            }
+            else
+            {
+                ords = await _context.GetOrders();
+            }
+            IEnumerable<Order> sortedOrdersList = null;
+            switch (SortOption)
+            {
+                case "Latest":
+                    sortedOrdersList = ords.OrderByDescending(x => x.Timestamp);
+                    break;
+                case "Earliest":
+                    sortedOrdersList = ords.OrderBy(x => x.Timestamp);
+                    break;
+                case "Most Expensive":
+                    sortedOrdersList = ords.OrderByDescending(x => x.Total);
+                    break;
+                case "Least Expensive":
+                    sortedOrdersList = ords.OrderBy(x => x.Total);
+                    break;
+            }
+            return View("Index", sortedOrdersList);
         }
 
         /// <summary>
