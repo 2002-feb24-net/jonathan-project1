@@ -13,6 +13,10 @@ namespace WheyMen.Infrastructure
     {
         private readonly WheyMenContext context;
 
+        public LocationDAL(WheyMenContext cont)
+        {
+            context = cont;
+        }
         public LocationDAL()
         {
             context = new WheyMenContext();

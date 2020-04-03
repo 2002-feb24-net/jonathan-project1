@@ -56,9 +56,6 @@ namespace WheyMenII.Test
                 using (var context = new WheyMenContext(options))
                 {
                     Repo = new CustomerDAL(context);
-
-
-
                     var custs = await Repo.GetCusts();
                     int initial_count = custs.ToList().Count;
                     Customer cust1 = new Customer
