@@ -197,15 +197,15 @@ namespace WheyMenII.UI.Controllers
             if (ModelState.IsValid)
             {
                 int cid;
+                var cst = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
                 if (Password == (_custContext.VerifyCustomer(Username, out cid)))
                 {
                     var new_order = new Order
                     {
                         LocId = order.LocId,
-                        //Cust = _custContext.FindByID(cid),
                         CustId = cid,
                         Total = 0,
-                        Timestamp = DateTime.Now
+                        Timestamp = TimeZoneInfo.ConvertTime(DateTime.Now, cst)
                     };
                     TempData["OrderID"] = _context.Add(new_order);
                     TempData["StoreID"] = order.LocId;

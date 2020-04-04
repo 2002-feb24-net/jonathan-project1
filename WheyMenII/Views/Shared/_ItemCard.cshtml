@@ -24,14 +24,6 @@
 <div class="item-card">
     <img src="~/Assets/Images/@Model.P.ImgURL" alt="Image not found" onerror="this.onerror=null;this.src='https://pngimage.net/wp-content/uploads/2018/06/supplements-png-5.png';" width="200" height="200" style="background:transparent"/>
     <dl class="row">
-        <div class="display qty">
-            <dt>
-                @Html.DisplayNameFor(model => model.Qty)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Qty)
-            </dd>
-        </div>
         <div class="display name">
             <dt>
                 @Html.DisplayNameFor(model => model.P.Name)
@@ -40,7 +32,16 @@
                 @Html.DisplayFor(model => model.P.Name)
             </dd>
         </div>
-        
+        <div class="display qty">
+            <dt>
+                @Html.DisplayNameFor(model => model.Qty)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Qty)
+            </dd>
+        </div>
+
+
     </dl>
 </div>
 

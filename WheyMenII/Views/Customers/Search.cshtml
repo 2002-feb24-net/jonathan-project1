@@ -3,40 +3,42 @@
     ViewData["Title"] = "Search";
 }
 
-<head>
-    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
-</head>
+    <head>
+        <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+        <link rel="stylesheet" type="text/css" href="~/css/OrderStlye.css" />
+    </head>
 
 <h1>Customers</h1>
 <div id="function-continer">
     <div id="function-buttons">
-        <button id="search-cust">Search Customers</button>
-        <button>
-            <a asp-action="Create">Create New</a>
-        </button>
+        <div id="function-buttons-center">
+            <button id="search-cust">Search Customers</button>
+            <button>
+                <a asp-action="Create">Create New</a>
+            </button>
+        </div>
+        </div>
+        <div id="function-inputs">
+            <input type="text" id="search-input-fn" style="display:none;" name="SearchFirstName" placeholder="First Name" />
+            <input type="text" id="search-input-ln" style="display:none;" name="SearchLastName" placeholder="Last Name" />
+            <button>
+                <a asp-action="Search" style="display:none;" id="search-begin">Begin Search</a>
+            </button>
 
-    </div>
-    <div id="function-inputs">
-        <input type="text" id="search-input-fn" style="display:none;" name="SearchFirstName" placeholder="First Name" />
-        <input type="text" id="search-input-ln" style="display:none;" name="SearchLastName" placeholder="Last Name" />
-        <button>
-            <a asp-action="Search" style="display:none;" id="search-begin">Begin Search</a>
-        </button>
-
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        @section scripts{
-            <script type="text/javascript">
-                $(document).ready(function () {
-                    $('#search-cust').click(function () {
-                        $('#search-input-fn').show(100);
-                        $('#search-input-ln').show(100);
-                        $('#search-begin').show(100);
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            @section scripts{
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#search-cust').click(function () {
+                            $('#search-input-fn').show(100);
+                            $('#search-input-ln').show(100);
+                            $('#search-begin').show(100);
+                        });
                     });
-                });
-            </script>
-        }
+                </script>
+            }
+        </div>
     </div>
-</div>
 
 <table class="table">
     <thead>
