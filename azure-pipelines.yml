@@ -124,11 +124,12 @@ stages:
             artifact: app
             displayName: artifact download app
 
+          - task: 
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
               azureSubscription: 'Azure subscription 1(1)(0331d11f-08e8-4a46-91f1-7c02b4a66c26)'
               appType: 'webApp'
               WebAppName: 'WheyMen-Jonathan-P1'
-              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+              packageForLinux: '$(Pipeline.Workspace)/app'
           - task: PublishBuildArtifacts@1
