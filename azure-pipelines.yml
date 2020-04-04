@@ -124,7 +124,6 @@ stages:
             artifact: app
             displayName: artifact download app
 
-          - task: 
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
