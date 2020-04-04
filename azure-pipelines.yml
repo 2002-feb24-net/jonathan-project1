@@ -131,3 +131,4 @@ stages:
               appType: 'webApp'
               WebAppName: 'WheyMen-Jonathan-P1'
               packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+          - task: PublishBuildArtifacts@1
