@@ -7,9 +7,8 @@
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/site.css" />
 </head>
-<h1>Create Order Item</h1>
+<h1>Add an Item</h1>
 
-<h4>Inventory</h4>
 @if (!ViewData.ModelState.IsValid && ViewData.ModelState["QuantityError"].Errors.Count > 0)
 {
     <div class="my-alert">
@@ -18,20 +17,6 @@
 }
 <hr />
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Inventory.First().P.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Inventory.First().Qty)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Inventory.First().P.Price)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
     <tbody>
         <div id="item-card-container" style="display:flex;justify-content:space-around;max-width:80vw;flex-wrap:wrap">
             @foreach (var item in Model.Inventory)
