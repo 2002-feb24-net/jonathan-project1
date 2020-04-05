@@ -17,6 +17,7 @@
         .display {
             display: flex;
             flex-direction: row;
+            justify-content: space-between;
         }
 
     </style>
@@ -38,6 +39,14 @@
             </dt>
             <dd>
                 @Html.DisplayFor(model => model.Qty)
+            </dd>
+        </div>
+        <div class="display price">
+            <dt>
+                @Html.DisplayNameFor(model => model.P.Price)
+            </dt>
+            <dd>
+                $@Html.DisplayFor(model => model.P.Price)
             </dd>
         </div>
 
