@@ -22,19 +22,6 @@
             @foreach (var item in Model.Inventory)
             {
                 Html.RenderPartial("_ItemCard", item);
-                /*
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.P.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Qty)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.P.Price)
-                    </td>
-                </tr>
-                */
             }
         </div>
     </tbody>

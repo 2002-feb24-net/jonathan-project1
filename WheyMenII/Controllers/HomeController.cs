@@ -20,6 +20,7 @@ namespace WheyMenII.Controllers
 
         public IActionResult Index()
         {
+            TempData.Clear();
             return View();
         }
 

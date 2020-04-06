@@ -26,6 +26,7 @@ namespace WheyMenII.UI
         // GET: Customers
         public async Task<IActionResult> Index()
         {
+            TempData.Clear();
             return View(await _context.GetCusts());
         }
 
@@ -49,10 +50,6 @@ namespace WheyMenII.UI
         // GET: Customers/Create
         public IActionResult Create()
         {
-            if(TempData["CustAddError"]!=null && (bool)TempData["CustAddError"]==true)
-            {
-                ModelState.AddModelError("CustAddError", "Creating the customer failed change username/email.");
-            }
             return View();
         }
 
@@ -63,6 +60,7 @@ namespace WheyMenII.UI
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Id,Name,Email,Username,Pwd,LastName")] Customer customer)
         {
+         
             if (ModelState.IsValid)
             {
                 try
@@ -71,13 +69,13 @@ namespace WheyMenII.UI
                 }
                 catch (Exception)
                 {
-                    TempData["CustAddError"] = true;
+                    ModelState.AddModelError("CustAddError", "Creating the customer failed change username/email.");
                     return View(customer);
                 }
                 logger.LogInformation($"Successfully created customer");
                 return RedirectToAction(nameof(Index));
             }
-            return View(customer);
+            return RedirectToAction("Create",customer);
         }
 
         // GET: Customers/Edit/5
