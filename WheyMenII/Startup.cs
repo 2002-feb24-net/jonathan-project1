@@ -44,7 +44,6 @@ namespace WheyMenII
                 logger.AddAzureWebAppDiagnostics();
                 logger.AddConsole();
                 logger.AddDebug();
-                
             });
             services.AddControllersWithViews();
         }
